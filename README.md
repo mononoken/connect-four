@@ -4,6 +4,16 @@ In this project, we are testing our ability to code via test-driven development 
 
 I just recently read '99 Bottles of OOP' by Sandi Metz, so I am also hoping to apply the principles from that book in this project as well. These include working horizontally, reaching Shameless green, refactoring under green, SOLID principles, and many more concepts.
 
+2022-08-26 Day One Night
+I realized I fucked up and at the very start already forgot the proper steps.
+
+Sandi Metz recommended reaching Shameless Green incrementally. I tried to find abstractions quickly and wrote a bunch of tests before writing any code. Instead, I should have written a test, written code, then written another test, and refactored or added code.
+
+At least I got to practice Git a bit instead of just scrapping the file.
+
+I will still start with Board, but this time incrementally use TDD to reach Shameless Green.
+
+2022-08-26 Day One
 Ideas:
 - Board#columns, Board#display, #Board#drop, #Board#win?
 - Process:
@@ -16,7 +26,6 @@ Ideas:
 Questions:
 - Should Shameless Green start with one class or is it okay to have some abstraction at the start?
 
-2022-08-26
 I have decided to work on the board first. I think having a stable working board will allow for an easier time testing and coding the rest of the game.
 
 The board should respond to #columns with a hash that includes the values of the discs on the board. The hash shall contain keys that represent the columns of the board with a value of an array with 6 values that represents the filled values (with the beginning of the array being the bottom of the board).
