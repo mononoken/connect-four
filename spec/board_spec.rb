@@ -73,11 +73,11 @@ describe Board do
     end
   end
 
-  describe '#previous_move' do
+  describe '#previous_drop' do
     context 'when no moves have been made' do
       subject(:new_board) { described_class.new }
       it 'returns nil' do
-        expect(new_board.previous_move).to be(nil)
+        expect(new_board.previous_drop).to be(nil)
       end
     end
 
@@ -89,7 +89,7 @@ describe Board do
       end
 
       it 'returns [3, 0]' do
-        expect(board.previous_move).to eq([3, 0])
+        expect(board.previous_drop).to eq([3, 0])
       end
     end
 
@@ -107,9 +107,9 @@ describe Board do
         ]
       end
 
-      it 'does not change value of previous_move' do
+      it 'does not change value of previous_drop' do
         expect { full_column_board.drop(1, 'x') }
-          .not_to change { full_column_board.previous_move }
+          .not_to change { full_column_board.previous_drop }
       end
     end
   end

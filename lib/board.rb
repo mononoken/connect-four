@@ -2,7 +2,7 @@
 
 class Board
   attr_reader :columns
-  attr_accessor :previous_move
+  attr_accessor :previous_drop
 
   def initialize(columns = Array.new(7) { Array.new(6) })
     @columns = columns
@@ -13,7 +13,7 @@ class Board
     if bottom_index.nil?
       nil
     else
-      self.previous_move = [column, bottom_index]
+      self.previous_drop = [column, bottom_index]
       columns[column][bottom_index] = mark
     end
   end
