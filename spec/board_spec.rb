@@ -114,9 +114,8 @@ describe Board do
     end
   end
 
-  # Continue after storing recent move
   describe '#win?(disc)' do
-    context 'when the recent move does not form a win' do
+    context 'when disc [4, 2] does not form a win' do
       subject(:continue_board) { described_class.new(partial_template) }
       let(:partial_template) do
         [
@@ -124,18 +123,71 @@ describe Board do
           ['x', 'o', 'x', nil, nil, nil],
           ['o', 'x', 'x', nil, nil, nil],
           ['o', 'o', 'x', nil, nil, nil],
-          ['x', 'o', nil, nil, nil, nil],
+          ['x', 'o', 'o', nil, nil, nil],
           [nil, nil, nil, nil, nil, nil],
           [nil, nil, nil, nil, nil, nil]
         ]
       end
 
-      before do
-        recent_move = continue_board.drop(4, 'o')
+      it 'returns false' do
+        expect(continue_board.win?([4, 2])).to be(false)
+      end
+    end
+
+    context 'when disc [4, 3] forms a diagonal win to the left' do
+      subject(:win_board) { described_class.new(win_template) }
+      let(:win_template) do
+        [
+          [nil, nil, nil, nil, nil, nil],
+          ['x', 'o', 'x', nil, nil, nil],
+          ['o', 'x', 'x', nil, nil, nil],
+          ['o', 'o', 'x', nil, nil, nil],
+          ['x', 'o', 'o', 'x', nil, nil],
+          [nil, nil, nil, nil, nil, nil],
+          [nil, nil, nil, nil, nil, nil]
+        ]
       end
 
-      xit 'returns false' do
-        expect(continue_board.win?(recent_move)).to be(false)
+      it 'returns true' do
+        expect(win_board.win?([4, 3])).to be(true)
+      end
+    end
+
+    context 'when disc [5, 4] forms a diagonal win to the left' do
+      subject(:win_board) { described_class.new(win_template) }
+      let(:win_template) do
+        [
+          [nil, nil, nil, nil, nil, nil],
+          ['x', 'o', 'x', nil, nil, nil],
+          ['o', 'o', 'o', 'x', nil, nil],
+          ['o', 'x', 'o', 'o', nil, nil],
+          ['x', 'o', 'o', 'o', 'x', nil],
+          ['x', 'o', 'x', 'x', 'o', nil],
+          ['x', nil, nil, nil, nil, nil]
+        ]
+      end
+
+      it 'returns true' do
+        expect(win_board.win?([5, 4])).to be(true)
+      end
+    end
+
+    context 'when disc [1, 3] forms a diagonal win to the right' do
+      subject(:win_board) { described_class.new(win_template) }
+      let(:win_template) do
+        [
+          [nil, nil, nil, nil, nil, nil],
+          ['x', 'o', 'x', 'o', nil, nil],
+          ['x', 'x', 'o', nil, nil, nil],
+          ['o', 'o', 'x', nil, nil, nil],
+          ['o', 'o', 'x', nil, nil, nil],
+          [nil, nil, nil, nil, nil, nil],
+          [nil, nil, nil, nil, nil, nil]
+        ]
+      end
+
+      it 'returns true' do
+        expect(win_board.win?([1, 3])).to be(true)
       end
     end
   end

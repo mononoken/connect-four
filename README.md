@@ -4,6 +4,11 @@ In this project, we are testing our ability to code via test-driven development 
 
 I just recently read '99 Bottles of OOP' by Sandi Metz, so I am also hoping to apply the principles from that book in this project as well. These include working horizontally, reaching Shameless green, refactoring under green, SOLID principles, and many more concepts.
 
+2022-08-28
+Decided to stop worrying so much and just do.
+
+I have also been thinking that maybe instead of trying to force Shameless Green in some direction, maybe the point is to focus on writing good tests and shamelessly writing the easiest code to make those tests green. Don't worry too much about conditionals, duplication, or any other opinionated code. Just write what is easy to pass your tests.
+
 2022-08-27
 I think I started last night at a bad spot again. Starting with the board visual made sense at the time since I could already visualize the expected behavior, but the visual relies on pieces that are not built yet. How am I supposed to return a visual without a place to store previous moves and to inject new moves?
 
