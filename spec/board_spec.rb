@@ -52,6 +52,92 @@ describe Board do
           .to(filled_template)
       end
     end
+
+    context 'when column is already full' do
+      subject(:full_board) { described_class.new(full_template) }
+      let(:full_template) do
+        [
+          ['o', 'o', 'x', 'o', 'o', 'o'],
+          ['x', 'o', 'x', 'o', 'x', 'x'],
+          ['o', 'x', 'o', 'o', 'o', 'x'],
+          ['o', 'x', 'o', 'x', 'x', 'o'],
+          ['x', 'x', 'x', 'o', 'o', 'x'],
+          ['o', 'o', 'x', 'x', 'o', 'o'],
+          ['x', 'o', 'o', 'x', 'o', 'x']
+        ]
+      end
+      it 'does not change column values' do
+        expect { full_board.drop(4, 'x') }
+          .not_to change { full_board.columns }
+      end
+    end
+  end
+
+  describe '#previous_move' do
+    context 'when no moves have been made' do
+      subject(:new_board) { described_class.new }
+      it 'returns nil' do
+        expect(new_board.previous_move).to be(nil)
+      end
+    end
+
+    context "when last move was marking 'o' in empty column 3" do
+      subject(:board) { described_class.new }
+
+      before do
+        board.drop(3, 'o')
+      end
+
+      it 'returns [3, 0]' do
+        expect(board.previous_move).to eq([3, 0])
+      end
+    end
+
+    context 'when last move was attempted in full column' do
+      subject(:full_column_board) { described_class.new(full_column_template) }
+      let(:full_column_template) do
+        [
+          [nil, nil, nil, nil, nil, nil],
+          ['x', 'o', 'x', 'o', 'x', 'o'],
+          ['o', 'x', nil, nil, nil, nil],
+          ['o', nil, nil, nil, nil, nil],
+          ['x', nil, nil, nil, nil, nil],
+          [nil, nil, nil, nil, nil, nil],
+          [nil, nil, nil, nil, nil, nil]
+        ]
+      end
+
+      it 'does not change value of previous_move' do
+        expect { full_column_board.drop(1, 'x') }
+          .not_to change { full_column_board.previous_move }
+      end
+    end
+  end
+
+  # Continue after storing recent move
+  describe '#win?(disc)' do
+    context 'when the recent move does not form a win' do
+      subject(:continue_board) { described_class.new(partial_template) }
+      let(:partial_template) do
+        [
+          [nil, nil, nil, nil, nil, nil],
+          ['x', 'o', 'x', nil, nil, nil],
+          ['o', 'x', 'x', nil, nil, nil],
+          ['o', 'o', 'x', nil, nil, nil],
+          ['x', 'o', nil, nil, nil, nil],
+          [nil, nil, nil, nil, nil, nil],
+          [nil, nil, nil, nil, nil, nil]
+        ]
+      end
+
+      before do
+        recent_move = continue_board.drop(4, 'o')
+      end
+
+      xit 'returns false' do
+        expect(continue_board.win?(recent_move)).to be(false)
+      end
+    end
   end
 end
 
