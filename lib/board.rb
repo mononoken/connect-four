@@ -20,33 +20,28 @@ class Board
     end
   end
 
-  def win?(disc)
-    if diagonal?(disc)
-      true
-    # elsif vertical?(disc)
-    # elsif horizontal?(disc)
-    else
-      false
-    end
-  end
+  # def win?(disc)
+  #   if diagonal_win?(disc)
+  #     true
+  #   # elsif vertical?(disc)
+  #   # elsif horizontal?(disc)
+  #   else
+  #     false
+  #   end
+  # end
 
   # Lots of wishful code.
   # Next diagonal is wishful
   # Coordinates are wishful
   # Combos might be wishful
   # I see linked lists but we can use arrays
-  def diagonal?(disc)
-    column_num = disc[0]
-    index = disc[1]
-    disc_mark = columns[column_num][index]
+  def diagonal_win?(disc)
+    disc_mark = mark(disc)
 
     combo_counter = 1
-
     loop do
       next_diagonal = disc.map { |coordinate| coordinate - 1 }
-      next_diagonal_column_num = next_diagonal[0]
-      next_diagonal_index = next_diagonal[1]
-      next_diagonal_mark = columns[next_diagonal_column_num][next_diagonal_index]
+      next_diagonal_mark = mark(next_diagonal)
 
       if next_diagonal_mark.nil?
         break
@@ -57,6 +52,11 @@ class Board
         break
       end
     end
+
     combo_counter >= 4
+  end
+
+  def mark(coordinates)
+    columns[coordinates[0]][coordinates[1]]
   end
 end
