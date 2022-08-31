@@ -377,6 +377,27 @@ describe Board do
       end
     end
   end
+
+  describe '#vertical(coordinates)' do
+    subject(:board) { described_class.new }
+    context 'when coordinates are [3, 3]' do
+      it 'returns the vertical containing [3, 3]' do
+        coordinates = [3, 3]
+        vertical_coordinates =
+          [[3, 0], [3, 1], [3, 2], [3, 3], [3, 4], [3, 5]]
+        expect(board.vertical(coordinates)).to eq(vertical_coordinates)
+      end
+    end
+
+    context 'when coordinates are [0, 0]' do
+      it 'returns the vertical containing [0, 0]' do
+        coordinates = [0, 0]
+        vertical_coordinates =
+          [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5]]
+        expect(board.vertical(coordinates)).to eq(vertical_coordinates)
+      end
+    end
+  end
 end
 
 # rubocop:enable Metrics/BlockLength
