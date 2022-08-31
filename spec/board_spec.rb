@@ -311,6 +311,71 @@ describe Board do
       end
     end
   end
+
+  describe '#horizontal(coordinates)' do
+    subject(:board) { described_class.new }
+    context 'when coordinates are [3, 3]' do
+      it 'returns the horizontal containing [3, 3]' do
+        coordinates = [3, 3]
+        horizontal_coordinates =
+          [[0, 3], [1, 3], [2, 3], [3, 3], [4, 3], [5, 3], [6, 3]]
+        expect(board.horizontal(coordinates)).to eq(horizontal_coordinates)
+      end
+    end
+
+    context 'when coordinates are [0, 0]' do
+      it 'returns the horizontal containing [0, 0]' do
+        coordinates = [0, 0]
+        horizontal_coordinates =
+          [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0]]
+        expect(board.horizontal(coordinates)).to eq(horizontal_coordinates)
+      end
+    end
+  end
+
+  describe '#horizontal_win?(disc)' do
+    context 'when disc [3, 2] does not form a horizontal win' do
+      subject(:continue_board) { described_class.new(partial_template) }
+      let(:partial_template) do
+        [
+          [nil, nil, nil, nil, nil, nil],
+          ['x', 'o', 'x', nil, nil, nil],
+          ['o', 'x', 'x', nil, nil, nil],
+          ['o', 'o', 'x', nil, nil, nil],
+          ['x', 'o', 'o', nil, nil, nil],
+          [nil, nil, nil, nil, nil, nil],
+          [nil, nil, nil, nil, nil, nil]
+        ]
+      end
+
+      it 'returns false' do
+        disc = [3, 2]
+        horizontal = continue_board.horizontal(disc)
+        expect(continue_board.horizontal_win?(disc, horizontal)).to be(false)
+      end
+    end
+
+    context 'when disc [0, 5] forms a horizontal win' do
+      subject(:win_board) { described_class.new(win_template) }
+      let(:win_template) do
+        [
+          [nil, nil, nil, nil, nil, nil],
+          ['x', 'o', 'x', nil, nil, nil],
+          ['o', 'x', 'x', nil, nil, nil],
+          ['o', 'x', 'x', nil, nil, nil],
+          ['o', 'x', 'o', nil, nil, nil],
+          ['o', nil, nil, nil, nil, nil],
+          [nil, nil, nil, nil, nil, nil]
+        ]
+      end
+
+      it 'returns true' do
+        disc = [0, 5]
+        horizontal = win_board.horizontal(disc)
+        expect(win_board.horizontal_win?(disc, horizontal)).to be(true)
+      end
+    end
+  end
 end
 
 # rubocop:enable Metrics/BlockLength

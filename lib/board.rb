@@ -23,16 +23,6 @@ class Board
     end
   end
 
-  def win?(disc)
-    # if diagonal_win?(disc)
-    #   true
-    # elsif vertical?(disc)
-    # elsif horizontal?(disc)
-    # else
-    #   false
-    # end
-  end
-
   def matching_marks?(group, mark)
     group.all? { |coordinates| mark(coordinates) == mark }
   end
@@ -43,10 +33,18 @@ class Board
     end.compact
   end
 
-  def diagonal_win?(disc, diagonal = left_diagonal(disc))
-    lines_of_four(diagonal).any? do |line_of_four|
+  def disc_wins?(disc, direction)
+    lines_of_four(direction).any? do |line_of_four|
       matching_marks?(line_of_four, mark(disc))
     end
+  end
+
+  def diagonal_win?(disc, diagonal)
+    disc_wins?(disc, diagonal)
+  end
+
+  def horizontal_win?(disc, horizontal)
+    disc_wins?(disc, horizontal)
   end
 
   def left_diagonal(coordinates)
@@ -91,6 +89,11 @@ class Board
       pointer = next_diagonal
     end
     right_diagonal
+  end
+
+  def horizontal(coordinates)
+    height = coordinates[1]
+    [[0, height], [1, height], [2, height], [3, height], [4, height], [5, height], [6, height]]
   end
 
   def off_board?(coordinates)
