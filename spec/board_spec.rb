@@ -114,8 +114,99 @@ describe Board do
     end
   end
 
+  describe '#off_board?(coordinates)' do
+    subject(:board) { described_class.new }
+    context 'when coordinates are [0, 0]' do
+      it 'returns false' do
+        coordinates = [0, 0]
+        expect(board.off_board?(coordinates)).to be(false)
+      end
+    end
+
+    context 'when coordinates are [6, 5]' do
+      it 'returns false' do
+        coordinates = [6, 5]
+        expect(board.off_board?(coordinates)).to be(false)
+      end
+    end
+
+    context 'when coordinates are [-1, 5]' do
+      it 'returns true' do
+        coordinates = [-1, 5]
+        expect(board.off_board?(coordinates)).to be(true)
+      end
+    end
+
+    context 'when coordinates are [3, -1]' do
+      it 'returns true' do
+        coordinates = [3, -1]
+        expect(board.off_board?(coordinates)).to be(true)
+      end
+    end
+  end
+
+  describe '#left_diagonal(coordinates)' do
+    subject(:board) { described_class.new }
+    context 'when coordinates are [3, 3]' do
+      it 'returns the left leaning diagonal containing [3, 3]' do
+        coordinates = [3, 3]
+        left_leaning_diagonal =
+          [[0, 0], [1, 1], [2, 2], [3, 3], [4, 4], [5, 5]]
+        expect(board.left_diagonal(coordinates)).to eq(left_leaning_diagonal)
+      end
+    end
+
+    context 'when coordinates are [0, 0]' do
+      it 'returns the left leaning diagonal containing [0, 0]' do
+        coordinates = [0, 0]
+        left_leaning_diagonal =
+          [[0, 0], [1, 1], [2, 2], [3, 3], [4, 4], [5, 5]]
+        expect(board.left_diagonal(coordinates)).to eq(left_leaning_diagonal)
+      end
+    end
+
+    context 'when coordinates are [1, 4]' do
+      it 'returns the left leaning diagonal containing [1, 4]' do
+        coordinates = [1, 4]
+        left_leaning_diagonal =
+          [[0, 3], [1, 4], [2, 5]]
+        expect(board.left_diagonal(coordinates)).to eq(left_leaning_diagonal)
+      end
+    end
+  end
+
+  describe '#right_diagonal(coordinates)' do
+    subject(:board) { described_class.new }
+    context 'when coordinates are [3, 3]' do
+      it 'returns the right leaning diagonal containing [3, 3]' do
+        coordinates = [3, 3]
+        right_leaning_diagonal =
+          [[1, 5], [2, 4], [3, 3], [4, 2], [5, 1], [6, 0]]
+        expect(board.right_diagonal(coordinates)).to eq(right_leaning_diagonal)
+      end
+    end
+
+    context 'when coordinates are [6, 0]' do
+      it 'returns the right leaning diagonal containing [6, 0]' do
+        coordinates = [6, 0]
+        right_leaning_diagonal =
+          [[1, 5], [2, 4], [3, 3], [4, 2], [5, 1], [6, 0]]
+        expect(board.right_diagonal(coordinates)).to eq(right_leaning_diagonal)
+      end
+    end
+
+    context 'when coordinates are [0, 0]' do
+      it 'returns the right leaning diagonal containing [0, 0]' do
+        coordinates = [0, 0]
+        right_leaning_diagonal =
+          [[0, 0]]
+        expect(board.right_diagonal(coordinates)).to eq(right_leaning_diagonal)
+      end
+    end
+  end
+
   describe '#diagonal_win?(disc)' do
-    context 'when disc [4, 2] does not form a diagonal win' do
+    context 'when disc [4, 2] does not form a left diagonal win' do
       subject(:continue_board) { described_class.new(partial_template) }
       let(:partial_template) do
         [
@@ -130,7 +221,9 @@ describe Board do
       end
 
       it 'returns false' do
-        expect(continue_board.diagonal_win?([4, 2])).to be(false)
+        disc = [4, 2]
+        left_diagonal = continue_board.left_diagonal(disc)
+        expect(continue_board.diagonal_win?(disc, left_diagonal)).to be(false)
       end
     end
 
@@ -149,7 +242,9 @@ describe Board do
       end
 
       it 'returns true' do
-        expect(win_board.diagonal_win?([4, 3])).to be(true)
+        disc = [4, 3]
+        left_diagonal = win_board.left_diagonal(disc)
+        expect(win_board.diagonal_win?(disc, left_diagonal)).to be(true)
       end
     end
 
@@ -168,7 +263,30 @@ describe Board do
       end
 
       it 'returns true' do
-        expect(win_board.diagonal_win?([5, 4])).to be(true)
+        disc = [5, 4]
+        left_diagonal = win_board.left_diagonal(disc)
+        expect(win_board.diagonal_win?(disc, left_diagonal)).to be(true)
+      end
+    end
+
+    context 'when disc [2, 1] does not form a right diagonal win' do
+      subject(:continue_board) { described_class.new(partial_template) }
+      let(:partial_template) do
+        [
+          [nil, nil, nil, nil, nil, nil],
+          ['x', 'o', 'x', nil, nil, nil],
+          ['o', 'x', 'x', nil, nil, nil],
+          ['o', 'o', 'x', nil, nil, nil],
+          ['x', 'o', 'o', nil, nil, nil],
+          [nil, nil, nil, nil, nil, nil],
+          [nil, nil, nil, nil, nil, nil]
+        ]
+      end
+
+      it 'returns false' do
+        disc = [2, 1]
+        right_diagonal = continue_board.right_diagonal(disc)
+        expect(continue_board.diagonal_win?(disc, right_diagonal)).to be(false)
       end
     end
 
@@ -186,8 +304,10 @@ describe Board do
         ]
       end
 
-      xit 'returns true' do
-        expect(win_board.diagonal_win?([1, 3])).to be(true)
+      it 'returns true' do
+        disc = [1, 3]
+        right_diagonal = win_board.right_diagonal(disc)
+        expect(win_board.diagonal_win?(disc, right_diagonal)).to be(true)
       end
     end
   end

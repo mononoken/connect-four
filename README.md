@@ -4,6 +4,14 @@ In this project, we are testing our ability to code via test-driven development 
 
 I just recently read '99 Bottles of OOP' by Sandi Metz, so I am also hoping to apply the principles from that book in this project as well. These include working horizontally, reaching Shameless green, refactoring under green, SOLID principles, and many more concepts.
 
+2022-08-31
+
+
+2022-08-29
+I may be forgetting parts of '99BOOP', but I feel like I am making progress. I enjoy having green to lean on. 
+
+I am making a bunch of changes to get the game to be able to check for diagonal wins. I am not refactoring one change at a time like '99BOOP' did, but I am making changes such that the tests stay green.
+
 2022-08-28
 Decided to stop worrying so much and just do.
 
