@@ -24,16 +24,15 @@ class Board
   end
 
   def win?(disc)
-    if diagonal_win?(disc)
-      true
+    # if diagonal_win?(disc)
+    #   true
     # elsif vertical?(disc)
     # elsif horizontal?(disc)
-    else
-      false
-    end
+    # else
+    #   false
+    # end
   end
 
-  # Make this open to checking right diagonal wins as well.
   def matching_marks?(group, mark)
     group.all? { |coordinates| mark(coordinates) == mark }
   end
