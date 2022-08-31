@@ -11,16 +11,26 @@ class Board
     @columns = columns
   end
 
-  # Am I using drop as both a noun and a verb?
-  # Should they be separate?
-  def drop(column, mark)
-    bottom_index = columns[column].find_index(nil)
-    if bottom_index.nil?
-      nil
-    else
-      columns[column][bottom_index] = mark
-      self.previous_drop = [column, bottom_index]
-    end
+  def column(number)
+    columns[number]
+  end
+
+  def row(number)
+    columns.map { |column| column[number] }
+  end
+
+  def first_nil(column_num)
+    column(column_num).find_index(nil)
+  end
+
+  def column_full?(column_num)
+    column(column_num).none?(nil)
+  end
+
+  def drop(column_num, mark)
+    return if column_full?(column_num)
+
+    column(column_num)[first_nil(column_num)] = mark
   end
 
   def matching_marks?(group, mark)
@@ -101,6 +111,7 @@ class Board
   end
 
   def mark(coordinates)
+    # DEPENDENCY
     columns[coordinates[0]][coordinates[1]]
   end
 end

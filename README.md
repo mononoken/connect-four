@@ -5,7 +5,11 @@ In this project, we are testing our ability to code via test-driven development 
 I just recently read '99 Bottles of OOP' by Sandi Metz, so I am also hoping to apply the principles from that book in this project as well. These include working horizontally, reaching Shameless green, refactoring under green, SOLID principles, and many more concepts.
 
 2022-08-31
+I was happy to make my diagonal methods cleaner, and I was able to make horizontal methods fairly quickly.
 
+Extracting methods is fun. I still worry that I am doing things incorrectly, but I keep reminding myself:
+- This is not a test that I must get 100% on.
+- If I do something incorrectly, the poor solution will reflect it and teach it.
 
 2022-08-29
 I may be forgetting parts of '99BOOP', but I feel like I am making progress. I enjoy having green to lean on. 
