@@ -11,6 +11,12 @@ Extracting methods is fun. I still worry that I am doing things incorrectly, but
 - This is not a test that I must get 100% on.
 - If I do something incorrectly, the poor solution will reflect it and teach it.
 
+I noticed many of my methods have a parameter called 'coordinates'. Are all of these 'coordinates' the same thing? Should these be methods for a new class? 
+
+I have the same case with the parameter 'column_num'. This one seems easier for me to extract, so I will try that and see what happens.
+
+That actually was not easy. Some of these methods refer to columns, which is a method in Board, so a dependency exists. The next question is, does this dependency need to exist? Or is that the next question? I look at row(row_number) in the context of Board, and I think, "My board does have a row with a row number and the same applies for columns." This leads me to think these methods are fine where they are.
+
 2022-08-29
 I may be forgetting parts of '99BOOP', but I feel like I am making progress. I enjoy having green to lean on. 
 

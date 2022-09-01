@@ -49,12 +49,16 @@ class Board
     end
   end
 
-  def diagonal_win?(disc, diagonal)
-    disc_wins?(disc, diagonal)
+  def diagonal_win?(disc)
+    disc_wins?(disc, left_diagonal(disc)) || disc_wins?(disc, right_diagonal(disc))
   end
 
-  def horizontal_win?(disc, horizontal)
-    disc_wins?(disc, horizontal)
+  def horizontal_win?(disc)
+    disc_wins?(disc, horizontal(disc))
+  end
+
+  def vertical_win?(disc)
+    disc_wins?(disc, vertical(disc))
   end
 
   def left_diagonal(coordinates)
