@@ -125,5 +125,71 @@ class Board
   end
 end
 
+class BoardCoordinator
+  attr_reader :coordinates
+
+  def initialize(coordinates)
+    @coordinates = coordinates
+  end
+
+  def horizontal(coordinates)
+    height = coordinates[1]
+    [[0, height], [1, height], [2, height], [3, height], [4, height], [5, height], [6, height]]
+  end
+
+  def vertical(coordinates)
+    row = coordinates[0]
+    [[row, 0], [row, 1], [row, 2], [row, 3], [row, 4], [row, 5]]
+  end
+
+  def left_diagonal(coordinates)
+    left_diagonal = [coordinates]
+    pointer = coordinates
+    loop do
+      next_diagonal = [pointer[0] - 1, pointer[1] - 1]
+      break if off_board?(next_diagonal)
+
+      left_diagonal.unshift(next_diagonal)
+      pointer = next_diagonal
+    end
+
+    pointer = coordinates
+    loop do
+      next_diagonal = [pointer[0] + 1, pointer[1] + 1]
+      break if off_board?(next_diagonal)
+
+      left_diagonal.push(next_diagonal)
+      pointer = next_diagonal
+    end
+    left_diagonal
+  end
+
+  def right_diagonal(coordinates)
+    right_diagonal = [coordinates]
+    pointer = coordinates
+    loop do
+      next_diagonal = [pointer[0] - 1, pointer[1] + 1]
+      break if off_board?(next_diagonal)
+
+      right_diagonal.unshift(next_diagonal)
+      pointer = next_diagonal
+    end
+
+    pointer = coordinates
+    loop do
+      next_diagonal = [pointer[0] + 1, pointer[1] - 1]
+      break if off_board?(next_diagonal)
+
+      right_diagonal.push(next_diagonal)
+      pointer = next_diagonal
+    end
+    right_diagonal
+  end
+
+  def off_board?(coordinates)
+    coordinates[0] < 0 || coordinates[0] > 6 || coordinates[1] < 0 || coordinates[1] > 5
+  end
+end
+
 # rubocop:enable Metrics/ClassLength(RuboCop)
 # rubocop:enable Metrics/MethodLength(RuboCop)
