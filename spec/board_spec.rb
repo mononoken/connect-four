@@ -73,48 +73,6 @@ describe Board do
     end
   end
 
-  # These tests are bad because they expect #previous_board behavior to be dependent on #drop
-  describe '#previous_drop' do
-    context 'when no moves have been made' do
-      subject(:new_board) { described_class.new }
-      xit 'returns nil' do
-        expect(new_board.previous_drop).to be(nil)
-      end
-    end
-
-    context "when last move was marking 'o' in empty column 3" do
-      subject(:board) { described_class.new }
-
-      before do
-        board.drop(3, 'o')
-      end
-
-      xit 'returns [3, 0]' do
-        expect(board.previous_drop).to eq([3, 0])
-      end
-    end
-
-    context 'when last move was attempted in full column' do
-      subject(:full_column_board) { described_class.new(full_column_template) }
-      let(:full_column_template) do
-        [
-          [nil, nil, nil, nil, nil, nil],
-          ['x', 'o', 'x', 'o', 'x', 'o'],
-          ['o', 'x', nil, nil, nil, nil],
-          ['o', nil, nil, nil, nil, nil],
-          ['x', nil, nil, nil, nil, nil],
-          [nil, nil, nil, nil, nil, nil],
-          [nil, nil, nil, nil, nil, nil]
-        ]
-      end
-
-      xit 'does not change value of previous_drop' do
-        expect { full_column_board.drop(1, 'x') }
-          .not_to change { full_column_board.previous_drop }
-      end
-    end
-  end
-
   describe '#off_board?(coordinates)' do
     subject(:board) { described_class.new }
     context 'when coordinates are [0, 0]' do

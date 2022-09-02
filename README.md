@@ -4,6 +4,52 @@ In this project, we are testing our ability to code via test-driven development 
 
 I just recently read '99 Bottles of OOP' by Sandi Metz, so I am also hoping to apply the principles from that book in this project as well. These include working horizontally, reaching Shameless green, refactoring under green, SOLID principles, and many more concepts.
 
+2022-09-02
+I have a sneaking suspicion that I found the wrong abstraction when extracting the repetitive 'coordinates' parameters. These are coordinates. Cells do have coordinates, but it is it a Cell's job to know other coordinates?
+
+I think perhaps what I really wanted was a Coordinator class. The Coordinator would know given a coordinate, what coordinates relate. It would not know what 'marks' or Cells would be in those coordinates. It simply would tell you, if you want the horizontal line that contains a coordinate, here it is.
+
+Now that seems like a class with a single role or a single action. "Give me a coordinate, and I will return you lines."
+
+2022-09-02
+I asked myself this morning, I am having trouble extracting the Column and Cell classes because of how I setup my tests. My tests expecte Board to be able to take an argument of an arrays that represent a board in Connect Four. This made it easy for me to write test boards.
+
+This thought led me to two others. The first, is that if Column and Cell are to be useful, they should be able to fulfill this test. My tests should be easy to follow, and the way they visually look now, I think that is the case.
+
+The second thought, however, is that my tests are misleading! The boards are flipped. I have columns horizontal and rows vertical. This is because of how arrays are defined in Ruby, they lean towards being horizontal (which is in turn a product of how English works).
+
+Why did I make these horizontal arrays represent columns instead of horizontal rows? Because the game has discs traverse through columns, not through rows. I made an unconscious decision that it would be best to keep columns as one clear object.
+
+Going back to my second thought which stems from the first. Visually, for my eyes, I can tell what the arrays with an array are trying to visually represent in the tests. However, is this the best form for the test? How does this array in arrays compare to just having one large array or even a string?
+
+I recall now that originally, I actually wanted to start with the display method of the board. If I had written that method, and it returned a string, then I could have used that string to compare with tests...
+
+But, isn't that going against a core principle of TDD? My tests should be decoupled from code. For example, if my tests all know that a #display method will return a string and that string represents a board, my tests now know something about the code. Worse, that knowing is a dependency! If the display method changed, all of my tests would become a wall of red.
+
+How is this different from the current state of affairs? Right now, with arrays in arrays being fed into the test, my test knows that it gives data grouped in a specific way, the Board class can make that into a board and use the appropriate methods on that data. While things would break if the expected input were to change for Board, that is something that should be foundational to the class and should stay constant if possible. Taking an array of 42 values seems foundational to me. The fact that the 42 values are grouped in 7 'column' arrays I think is also fine, for now.
+
+2022-09-01
+I had a thought this morning. My new Disc class seems to have some problems. The use of its methods are currently only being used for helping to find wins on the board. They are also planned to store whatever mark is dropped in each space on the board.
+
+That's where my concern lines. There are discs, but there is also the space the disc resides. Which does my Disc class represent?
+
+If it is the space of the board itself, it is a poor choice of word. In the beginning of the game, the board will have no discs dropped. Will these spaces contain no object then?
+
+My bigger worry is, if these objects are created as they are dropped, then how will a disc already on the board know when a new disc has been dropped beside it? I would have to update all discs each time of the state of the board when a new disc is dropped. That sounds awfully inefficient!
+
+Perhaps it is not. If I think of it concretely, what is this board? This board is a collection of columns, which also happen to be a collection of rows and diagonals. Each row is a collection of spaces which can receive a disc. Each disc will thus have a position on the overall board, but that position will already be known by the space itself. Thus the disc really only needs to know its mark.
+
+I think this idea of spaces presented itself by the fact that I named the parameters for methods 'coordinates'. I did not name them 'discs' but last night I mistook them as Discs.
+
+
+So, later in the day, I was able to name one of the things that was bugging me. It was a code smell called Primitive Obsession. I was using arrays as coordinates and as columns and as the set of columns. These formed the foundation of data storage in Board. However, these were all ultimately instances of the primitive class, Array. I wanted these to be their own classes. However, when I started work on extracting a class such as Column, I discovered a tremendous horror. Many of my tests relied on the ability to inject an array of arrays into Board.
+
+I am currently fumbling to find a way to inject these extracted classes into Board without breaking my tests. I wonder how I should have written these tests to begin with to avoid this.
+
+I also hear the whisper of shameless green. What is the problem here? My tests are shamelessly green. Sure, there is a code smell here, but I am not trying to make any changes here so should I leave it as is with the code smells and continue on the project?
+
+I'm curious what's going to happen if I continue on this refactoring path, so I am going for it. I realized that I could define #columns to return whatever I want if I define the method instead of attr_reader'ing it. So, if I inject my class and somehow get an array of the same shape to return from the new classes and have that return from #columns, the tests should all still pass.
+
 2022-08-31
 I was happy to make my diagonal methods cleaner, and I was able to make horizontal methods fairly quickly.
 

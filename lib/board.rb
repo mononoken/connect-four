@@ -5,7 +5,6 @@
 
 class Board
   attr_reader :columns
-  attr_accessor :previous_drop
 
   def initialize(columns = Array.new(7) { Array.new(6) })
     @columns = columns
