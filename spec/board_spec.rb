@@ -350,7 +350,7 @@ describe Board do
       end
     end
 
-    context 'when disc [0, 5] forms a horizontal win' do
+    context 'when disc [5, 0] forms a horizontal win' do
       subject(:win_board) { described_class.new(win_template) }
       let(:win_template) do
         [
@@ -365,7 +365,7 @@ describe Board do
       end
 
       it 'returns true' do
-        disc = [0, 5]
+        disc = [5, 0]
         expect(win_board.horizontal_win?(disc)).to be(true)
       end
     end
