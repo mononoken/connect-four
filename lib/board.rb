@@ -34,6 +34,8 @@ class Board
   end
 
   def matching_marks?(group, mark)
+    return false if mark.nil?
+
     group.all? { |coordinates| mark(coordinates) == mark }
   end
 
