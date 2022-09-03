@@ -104,66 +104,6 @@ describe Board do
     end
   end
 
-  describe '#left_diagonal(coordinates)' do
-    subject(:board) { described_class.new }
-    context 'when coordinates are [3, 3]' do
-      it 'returns the left leaning diagonal containing [3, 3]' do
-        coordinates = [3, 3]
-        left_leaning_diagonal =
-          [[0, 0], [1, 1], [2, 2], [3, 3], [4, 4], [5, 5]]
-        expect(board.left_diagonal(coordinates)).to eq(left_leaning_diagonal)
-      end
-    end
-
-    context 'when coordinates are [0, 0]' do
-      it 'returns the left leaning diagonal containing [0, 0]' do
-        coordinates = [0, 0]
-        left_leaning_diagonal =
-          [[0, 0], [1, 1], [2, 2], [3, 3], [4, 4], [5, 5]]
-        expect(board.left_diagonal(coordinates)).to eq(left_leaning_diagonal)
-      end
-    end
-
-    context 'when coordinates are [1, 4]' do
-      it 'returns the left leaning diagonal containing [1, 4]' do
-        coordinates = [1, 4]
-        left_leaning_diagonal =
-          [[0, 3], [1, 4], [2, 5]]
-        expect(board.left_diagonal(coordinates)).to eq(left_leaning_diagonal)
-      end
-    end
-  end
-
-  describe '#right_diagonal(coordinates)' do
-    subject(:board) { described_class.new }
-    context 'when coordinates are [3, 3]' do
-      it 'returns the right leaning diagonal containing [3, 3]' do
-        coordinates = [3, 3]
-        right_leaning_diagonal =
-          [[1, 5], [2, 4], [3, 3], [4, 2], [5, 1], [6, 0]]
-        expect(board.right_diagonal(coordinates)).to eq(right_leaning_diagonal)
-      end
-    end
-
-    context 'when coordinates are [6, 0]' do
-      it 'returns the right leaning diagonal containing [6, 0]' do
-        coordinates = [6, 0]
-        right_leaning_diagonal =
-          [[1, 5], [2, 4], [3, 3], [4, 2], [5, 1], [6, 0]]
-        expect(board.right_diagonal(coordinates)).to eq(right_leaning_diagonal)
-      end
-    end
-
-    context 'when coordinates are [0, 0]' do
-      it 'returns the right leaning diagonal containing [0, 0]' do
-        coordinates = [0, 0]
-        right_leaning_diagonal =
-          [[0, 0]]
-        expect(board.right_diagonal(coordinates)).to eq(right_leaning_diagonal)
-      end
-    end
-  end
-
   describe '#diagonal_win?(disc)' do
     context 'when disc [4, 2] does not form a left diagonal win' do
       subject(:continue_board) { described_class.new(partial_template) }
@@ -266,27 +206,6 @@ describe Board do
     end
   end
 
-  describe '#horizontal(coordinates)' do
-    subject(:board) { described_class.new }
-    context 'when coordinates are [3, 3]' do
-      it 'returns the horizontal containing [3, 3]' do
-        coordinates = [3, 3]
-        horizontal_coordinates =
-          [[0, 3], [1, 3], [2, 3], [3, 3], [4, 3], [5, 3], [6, 3]]
-        expect(board.horizontal(coordinates)).to eq(horizontal_coordinates)
-      end
-    end
-
-    context 'when coordinates are [0, 0]' do
-      it 'returns the horizontal containing [0, 0]' do
-        coordinates = [0, 0]
-        horizontal_coordinates =
-          [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0]]
-        expect(board.horizontal(coordinates)).to eq(horizontal_coordinates)
-      end
-    end
-  end
-
   describe '#horizontal_win?(disc)' do
     context 'when disc [3, 2] does not form a horizontal win' do
       subject(:continue_board) { described_class.new(partial_template) }
@@ -329,27 +248,6 @@ describe Board do
     end
   end
 
-  describe '#vertical(coordinates)' do
-    subject(:board) { described_class.new }
-    context 'when coordinates are [3, 3]' do
-      it 'returns the vertical containing [3, 3]' do
-        coordinates = [3, 3]
-        vertical_coordinates =
-          [[3, 0], [3, 1], [3, 2], [3, 3], [3, 4], [3, 5]]
-        expect(board.vertical(coordinates)).to eq(vertical_coordinates)
-      end
-    end
-
-    context 'when coordinates are [0, 0]' do
-      it 'returns the vertical containing [0, 0]' do
-        coordinates = [0, 0]
-        vertical_coordinates =
-          [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5]]
-        expect(board.vertical(coordinates)).to eq(vertical_coordinates)
-      end
-    end
-  end
-
   describe '#vertical_win?(disc)' do
     context 'when disc [3, 2] does not form a horizontal win' do
       subject(:continue_board) { described_class.new(partial_template) }
@@ -388,6 +286,116 @@ describe Board do
       it 'returns true' do
         disc = [2, 4]
         expect(win_board.vertical_win?(disc)).to be(true)
+      end
+    end
+  end
+end
+
+describe BoardCoordinator do
+  describe '#horizontal' do
+    context 'when coordinates are [3, 3]' do
+      subject(:coordinator_3_3) { described_class.new(coordinates) }
+      let(:coordinates) { [3, 3] }
+      it 'returns the horizontal containing [3, 3]' do
+        horizontal_coordinates =
+          [[0, 3], [1, 3], [2, 3], [3, 3], [4, 3], [5, 3], [6, 3]]
+        expect(coordinator_3_3.horizontal).to eq(horizontal_coordinates)
+      end
+    end
+
+    context 'when coordinates are [0, 0]' do
+      subject(:coordinator_0_0) { described_class.new(coordinates) }
+      let(:coordinates) { [0, 0] }
+      it 'returns the horizontal containing [0, 0]' do
+        horizontal_coordinates =
+          [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0]]
+        expect(coordinator_0_0.horizontal).to eq(horizontal_coordinates)
+      end
+    end
+  end
+
+  describe '#vertical' do
+    context 'when coordinates are [3, 3]' do
+      subject(:coordinator_3_3) { described_class.new(coordinates) }
+      let(:coordinates) { [3, 3] }
+      it 'returns the vertical containing [3, 3]' do
+        vertical_coordinates =
+          [[3, 0], [3, 1], [3, 2], [3, 3], [3, 4], [3, 5]]
+        expect(coordinator_3_3.vertical).to eq(vertical_coordinates)
+      end
+    end
+
+    context 'when coordinates are [0, 0]' do
+      subject(:coordinator_0_0) { described_class.new(coordinates) }
+      let(:coordinates) { [0, 0] }
+      it 'returns the vertical containing [0, 0]' do
+        vertical_coordinates =
+          [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5]]
+        expect(coordinator_0_0.vertical).to eq(vertical_coordinates)
+      end
+    end
+  end
+
+  describe '#left_diagonal' do
+    context 'when coordinates are [3, 3]' do
+      subject(:coordinator_3_3) { described_class.new(coordinates) }
+      let(:coordinates) { [3, 3] }
+      it 'returns the left leaning diagonal containing [3, 3]' do
+        left_leaning_diagonal =
+          [[0, 0], [1, 1], [2, 2], [3, 3], [4, 4], [5, 5]]
+        expect(coordinator_3_3.left_diagonal).to eq(left_leaning_diagonal)
+      end
+    end
+
+    context 'when coordinates are [0, 0]' do
+      subject(:coordinator_0_0) { described_class.new(coordinates) }
+      let(:coordinates) { [0, 0] }
+      it 'returns the left leaning diagonal containing [0, 0]' do
+        left_leaning_diagonal =
+          [[0, 0], [1, 1], [2, 2], [3, 3], [4, 4], [5, 5]]
+        expect(coordinator_0_0.left_diagonal).to eq(left_leaning_diagonal)
+      end
+    end
+
+    context 'when coordinates are [1, 4]' do
+      subject(:coordinator_1_4) { described_class.new(coordinates) }
+      let(:coordinates) { [1, 4] }
+      it 'returns the left leaning diagonal containing [1, 4]' do
+        left_leaning_diagonal =
+          [[0, 3], [1, 4], [2, 5]]
+        expect(coordinator_1_4.left_diagonal).to eq(left_leaning_diagonal)
+      end
+    end
+  end
+
+  describe '#right_diagonal' do
+    context 'when coordinates are [3, 3]' do
+      subject(:coordinator_3_3) { described_class.new(coordinates) }
+      let(:coordinates) { [3, 3] }
+      it 'returns the right leaning diagonal containing [3, 3]' do
+        right_leaning_diagonal =
+          [[1, 5], [2, 4], [3, 3], [4, 2], [5, 1], [6, 0]]
+        expect(coordinator_3_3.right_diagonal).to eq(right_leaning_diagonal)
+      end
+    end
+
+    context 'when coordinates are [6, 0]' do
+      subject(:coordinator_6_0) { described_class.new(coordinates) }
+      let(:coordinates) { [6, 0] }
+      it 'returns the right leaning diagonal containing [6, 0]' do
+        right_leaning_diagonal =
+          [[1, 5], [2, 4], [3, 3], [4, 2], [5, 1], [6, 0]]
+        expect(coordinator_6_0.right_diagonal).to eq(right_leaning_diagonal)
+      end
+    end
+
+    context 'when coordinates are [0, 0]' do
+      subject(:coordinator_0_0) { described_class.new(coordinates) }
+      let(:coordinates) { [0, 0] }
+      it 'returns the right leaning diagonal containing [0, 0]' do
+        right_leaning_diagonal =
+          [[0, 0]]
+        expect(coordinator_0_0.right_diagonal).to eq(right_leaning_diagonal)
       end
     end
   end
