@@ -5,7 +5,7 @@ require_relative '../lib/board'
 # rubocop:disable Metrics/BlockLength
 
 describe Board do
-  describe '#drop(column, mark)' do
+  describe '#drop' do
     context 'when column is empty' do
       subject(:new_board) { described_class.new }
       it 'changes first value of the column to the mark' do
@@ -73,7 +73,7 @@ describe Board do
     end
   end
 
-  describe '#diagonal_win?(disc)' do
+  describe '#diagonal_win?' do
     context 'when disc [4, 2] does not form a left diagonal win' do
       subject(:continue_board) { described_class.new(partial_template) }
       let(:partial_template) do
@@ -175,7 +175,7 @@ describe Board do
     end
   end
 
-  describe '#horizontal_win?(disc)' do
+  describe '#horizontal_win?' do
     context 'when disc [3, 2] does not form a horizontal win' do
       subject(:continue_board) { described_class.new(partial_template) }
       let(:partial_template) do
@@ -217,7 +217,7 @@ describe Board do
     end
   end
 
-  describe '#vertical_win?(disc)' do
+  describe '#vertical_win?' do
     context 'when disc [3, 2] does not form a horizontal win' do
       subject(:continue_board) { described_class.new(partial_template) }
       let(:partial_template) do
