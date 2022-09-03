@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/ClassLength(RuboCop)
-# rubocop:disable Metrics/MethodLength(RuboCop)
-
+# Represents a 6x7 Connect Four board.
 class Board
   attr_reader :columns
 
@@ -14,34 +12,10 @@ class Board
     columns[number]
   end
 
-  def row(number)
-    columns.map { |column| column[number] }
-  end
-
-  def first_nil(column_num)
-    column(column_num).find_index(nil)
-  end
-
-  def column_full?(column_num)
-    column(column_num).none?(nil)
-  end
-
   def drop(column_num, mark)
     return if column_full?(column_num)
 
     column(column_num)[first_nil(column_num)] = mark
-  end
-
-  def matching_marks?(group, mark)
-    return false if mark.nil?
-
-    group.all? { |coordinates| mark(coordinates) == mark }
-  end
-
-  def lines_of_four(line)
-    line.map.with_index do |_, index|
-      line[index..index + 3] if line[index..index + 3].count == 4
-    end.compact
   end
 
   def disc_wins?(disc, direction)
@@ -55,47 +29,53 @@ class Board
   end
 
   def left_diagonal_win?(disc)
-    disc_wins?(disc, BoardCoordinator.new(disc).left_diagonal)
+    disc_wins?(disc, line(disc).left_diagonal)
   end
 
   def right_diagonal_win?(disc)
-    disc_wins?(disc, BoardCoordinator.new(disc).right_diagonal)
+    disc_wins?(disc, line(disc).right_diagonal)
   end
 
   def horizontal_win?(disc)
-    disc_wins?(disc, BoardCoordinator.new(disc).horizontal)
+    disc_wins?(disc, line(disc).horizontal)
   end
 
   def vertical_win?(disc)
-    disc_wins?(disc, BoardCoordinator.new(disc).vertical)
+    disc_wins?(disc, line(disc).vertical)
   end
 
-  def left_diagonal(coordinates)
-    BoardCoordinator.new(coordinates).left_diagonal
-  end
-
-  def right_diagonal(coordinates)
-    BoardCoordinator.new(coordinates).right_diagonal
-  end
-
-  def horizontal(coordinates)
-    BoardCoordinator.new(coordinates).horizontal
-  end
-
-  def vertical(coordinates)
-    BoardCoordinator.new(coordinates).vertical
-  end
-
-  def off_board?(coordinates)
-    BoardCoordinator.new(coordinates).off_board?
-  end
+  private
 
   def mark(coordinates)
     columns[coordinates[0]][coordinates[1]]
   end
+
+  def first_nil(column_num)
+    column(column_num).find_index(nil)
+  end
+
+  def column_full?(column_num)
+    column(column_num).none?(nil)
+  end
+
+  def line(coordinates)
+    BoardCoordinator.new(coordinates)
+  end
+
+  def matching_marks?(line, mark)
+    return false if mark.nil?
+
+    line.all? { |coordinates| mark(coordinates) == mark }
+  end
+
+  def lines_of_four(line)
+    line.map.with_index do |_, index|
+      line[index..index + 3] if line[index..index + 3].count == 4
+    end.compact
+  end
 end
 
-# Future new name: Line?
+# Finds lines for a given coordinate.
 class BoardCoordinator
   COL_QUANTITY = 7
   ROW_QUANTITY = 6
@@ -126,44 +106,44 @@ class BoardCoordinator
 
   def left_diagonal
     left_diagonal = [coordinates]
-    pointer = coordinates
+    pointer = self
     loop do
-      next_diagonal = BoardCoordinator.new([pointer[0] - 1, pointer[1] - 1])
+      next_diagonal = BoardCoordinator.new([pointer.column_num - 1, pointer.row_num - 1])
       break if next_diagonal.off_board?
 
       left_diagonal.unshift(next_diagonal.coordinates)
-      pointer = next_diagonal.coordinates
+      pointer = next_diagonal
     end
 
-    pointer = coordinates
+    pointer = self
     loop do
-      next_diagonal = BoardCoordinator.new([pointer[0] + 1, pointer[1] + 1])
+      next_diagonal = BoardCoordinator.new([pointer.column_num + 1, pointer.row_num + 1])
       break if next_diagonal.off_board?
 
       left_diagonal.push(next_diagonal.coordinates)
-      pointer = next_diagonal.coordinates
+      pointer = next_diagonal
     end
     left_diagonal
   end
 
   def right_diagonal
     right_diagonal = [coordinates]
-    pointer = coordinates
+    pointer = self
     loop do
-      next_diagonal = BoardCoordinator.new([pointer[0] - 1, pointer[1] + 1])
+      next_diagonal = BoardCoordinator.new([pointer.column_num - 1, pointer.row_num + 1])
       break if next_diagonal.off_board?
 
       right_diagonal.unshift(next_diagonal.coordinates)
-      pointer = next_diagonal.coordinates
+      pointer = next_diagonal
     end
 
-    pointer = coordinates
+    pointer = self
     loop do
-      next_diagonal = BoardCoordinator.new([pointer[0] + 1, pointer[1] - 1])
+      next_diagonal = BoardCoordinator.new([pointer.column_num + 1, pointer.row_num - 1])
       break if next_diagonal.off_board?
 
       right_diagonal.push(next_diagonal.coordinates)
-      pointer = next_diagonal.coordinates
+      pointer = next_diagonal
     end
     right_diagonal
   end
@@ -172,6 +152,3 @@ class BoardCoordinator
     column_num.negative? || column_num > COL_UPPER_INDEX || row_num.negative? || row_num > ROW_UPPER_INDEX
   end
 end
-
-# rubocop:enable Metrics/ClassLength(RuboCop)
-# rubocop:enable Metrics/MethodLength(RuboCop)
