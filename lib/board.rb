@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'board_coordinator'
+
 # Represents a 6x7 Connect Four board.
 class Board
   attr_reader :columns
@@ -72,83 +74,5 @@ class Board
     line.map.with_index do |_, index|
       line[index..index + 3] if line[index..index + 3].count == 4
     end.compact
-  end
-end
-
-# Finds lines for a given coordinate.
-class BoardCoordinator
-  COL_QUANTITY = 7
-  ROW_QUANTITY = 6
-  COL_UPPER_INDEX = COL_QUANTITY - 1
-  ROW_UPPER_INDEX = ROW_QUANTITY - 1
-
-  attr_reader :coordinates
-
-  def initialize(coordinates)
-    @coordinates = coordinates
-  end
-
-  def column_num
-    coordinates[0]
-  end
-
-  def row_num
-    coordinates[1]
-  end
-
-  def horizontal(column_quantity = COL_QUANTITY)
-    Array.new(column_quantity) { |index| [index, row_num] }
-  end
-
-  def vertical(row_quantity = ROW_QUANTITY)
-    Array.new(row_quantity) { |index| [column_num, index] }
-  end
-
-  def left_diagonal
-    left_diagonal = [coordinates]
-    pointer = self
-    loop do
-      next_diagonal = BoardCoordinator.new([pointer.column_num - 1, pointer.row_num - 1])
-      break if next_diagonal.off_board?
-
-      left_diagonal.unshift(next_diagonal.coordinates)
-      pointer = next_diagonal
-    end
-
-    pointer = self
-    loop do
-      next_diagonal = BoardCoordinator.new([pointer.column_num + 1, pointer.row_num + 1])
-      break if next_diagonal.off_board?
-
-      left_diagonal.push(next_diagonal.coordinates)
-      pointer = next_diagonal
-    end
-    left_diagonal
-  end
-
-  def right_diagonal
-    right_diagonal = [coordinates]
-    pointer = self
-    loop do
-      next_diagonal = BoardCoordinator.new([pointer.column_num - 1, pointer.row_num + 1])
-      break if next_diagonal.off_board?
-
-      right_diagonal.unshift(next_diagonal.coordinates)
-      pointer = next_diagonal
-    end
-
-    pointer = self
-    loop do
-      next_diagonal = BoardCoordinator.new([pointer.column_num + 1, pointer.row_num - 1])
-      break if next_diagonal.off_board?
-
-      right_diagonal.push(next_diagonal.coordinates)
-      pointer = next_diagonal
-    end
-    right_diagonal
-  end
-
-  def off_board?
-    column_num.negative? || column_num > COL_UPPER_INDEX || row_num.negative? || row_num > ROW_UPPER_INDEX
   end
 end
