@@ -51,15 +51,23 @@ class Board
   end
 
   def diagonal_win?(disc)
-    disc_wins?(disc, left_diagonal(disc)) || disc_wins?(disc, right_diagonal(disc))
+    left_diagonal_win?(disc) || right_diagonal_win?(disc)
+  end
+
+  def left_diagonal_win?(disc)
+    disc_wins?(disc, BoardCoordinator.new(disc).left_diagonal)
+  end
+
+  def right_diagonal_win?(disc)
+    disc_wins?(disc, BoardCoordinator.new(disc).right_diagonal)
   end
 
   def horizontal_win?(disc)
-    disc_wins?(disc, horizontal(disc))
+    disc_wins?(disc, BoardCoordinator.new(disc).horizontal)
   end
 
   def vertical_win?(disc)
-    disc_wins?(disc, vertical(disc))
+    disc_wins?(disc, BoardCoordinator.new(disc).vertical)
   end
 
   def left_diagonal(coordinates)
@@ -108,15 +116,15 @@ class BoardCoordinator
     coordinates[1]
   end
 
-  def horizontal(y_axis = row_num, column_quantity = COL_QUANTITY)
-    Array.new(column_quantity) { |index| [index, y_axis] }
+  def horizontal(column_quantity = COL_QUANTITY)
+    Array.new(column_quantity) { |index| [index, row_num] }
   end
 
-  def vertical(x_axis = column_num, row_quantity = ROW_QUANTITY)
-    Array.new(row_quantity) { |index| [x_axis, index] }
+  def vertical(row_quantity = ROW_QUANTITY)
+    Array.new(row_quantity) { |index| [column_num, index] }
   end
 
-  def left_diagonal(coordinates = self.coordinates)
+  def left_diagonal
     left_diagonal = [coordinates]
     pointer = coordinates
     loop do
@@ -138,7 +146,7 @@ class BoardCoordinator
     left_diagonal
   end
 
-  def right_diagonal(coordinates = self.coordinates)
+  def right_diagonal
     right_diagonal = [coordinates]
     pointer = coordinates
     loop do
