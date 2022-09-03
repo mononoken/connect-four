@@ -63,61 +63,23 @@ class Board
   end
 
   def left_diagonal(coordinates)
-    left_diagonal = [coordinates]
-    pointer = coordinates
-    loop do
-      next_diagonal = [pointer[0] - 1, pointer[1] - 1]
-      break if off_board?(next_diagonal)
-
-      left_diagonal.unshift(next_diagonal)
-      pointer = next_diagonal
-    end
-
-    pointer = coordinates
-    loop do
-      next_diagonal = [pointer[0] + 1, pointer[1] + 1]
-      break if off_board?(next_diagonal)
-
-      left_diagonal.push(next_diagonal)
-      pointer = next_diagonal
-    end
-    left_diagonal
+    BoardCoordinator.new(coordinates).left_diagonal
   end
 
   def right_diagonal(coordinates)
-    right_diagonal = [coordinates]
-    pointer = coordinates
-    loop do
-      next_diagonal = [pointer[0] - 1, pointer[1] + 1]
-      break if off_board?(next_diagonal)
-
-      right_diagonal.unshift(next_diagonal)
-      pointer = next_diagonal
-    end
-
-    pointer = coordinates
-    loop do
-      next_diagonal = [pointer[0] + 1, pointer[1] - 1]
-      break if off_board?(next_diagonal)
-
-      right_diagonal.push(next_diagonal)
-      pointer = next_diagonal
-    end
-    right_diagonal
+    BoardCoordinator.new(coordinates).right_diagonal
   end
 
   def horizontal(coordinates)
-    height = coordinates[1]
-    [[0, height], [1, height], [2, height], [3, height], [4, height], [5, height], [6, height]]
+    BoardCoordinator.new(coordinates).horizontal
   end
 
   def vertical(coordinates)
-    row = coordinates[0]
-    [[row, 0], [row, 1], [row, 2], [row, 3], [row, 4], [row, 5]]
+    BoardCoordinator.new(coordinates).vertical
   end
 
   def off_board?(coordinates)
-    coordinates[0] < 0 || coordinates[0] > 6 || coordinates[1] < 0 || coordinates[1] > 5
+    BoardCoordinator.new(coordinates).off_board?
   end
 
   def mark(coordinates)
@@ -125,69 +87,81 @@ class Board
   end
 end
 
+# Future new name: Line?
 class BoardCoordinator
+  COL_QUANTITY = 7
+  ROW_QUANTITY = 6
+  COL_UPPER_INDEX = COL_QUANTITY - 1
+  ROW_UPPER_INDEX = ROW_QUANTITY - 1
+
   attr_reader :coordinates
 
   def initialize(coordinates)
     @coordinates = coordinates
   end
 
-  def horizontal(coordinates)
-    height = coordinates[1]
-    [[0, height], [1, height], [2, height], [3, height], [4, height], [5, height], [6, height]]
+  def column_num
+    coordinates[0]
   end
 
-  def vertical(coordinates)
-    row = coordinates[0]
-    [[row, 0], [row, 1], [row, 2], [row, 3], [row, 4], [row, 5]]
+  def row_num
+    coordinates[1]
   end
 
-  def left_diagonal(coordinates)
+  def horizontal(y_axis = row_num, column_quantity = COL_QUANTITY)
+    Array.new(column_quantity) { |index| [index, y_axis] }
+  end
+
+  def vertical(x_axis = column_num, row_quantity = ROW_QUANTITY)
+    Array.new(row_quantity) { |index| [x_axis, index] }
+  end
+
+  def left_diagonal(coordinates = self.coordinates)
     left_diagonal = [coordinates]
     pointer = coordinates
     loop do
-      next_diagonal = [pointer[0] - 1, pointer[1] - 1]
-      break if off_board?(next_diagonal)
+      next_diagonal = BoardCoordinator.new([pointer[0] - 1, pointer[1] - 1])
+      break if next_diagonal.off_board?
 
-      left_diagonal.unshift(next_diagonal)
-      pointer = next_diagonal
+      left_diagonal.unshift(next_diagonal.coordinates)
+      pointer = next_diagonal.coordinates
     end
 
     pointer = coordinates
     loop do
-      next_diagonal = [pointer[0] + 1, pointer[1] + 1]
-      break if off_board?(next_diagonal)
+      next_diagonal = BoardCoordinator.new([pointer[0] + 1, pointer[1] + 1])
+      break if next_diagonal.off_board?
 
-      left_diagonal.push(next_diagonal)
-      pointer = next_diagonal
+      left_diagonal.push(next_diagonal.coordinates)
+      pointer = next_diagonal.coordinates
     end
     left_diagonal
   end
 
-  def right_diagonal(coordinates)
+  def right_diagonal(coordinates = self.coordinates)
     right_diagonal = [coordinates]
     pointer = coordinates
     loop do
-      next_diagonal = [pointer[0] - 1, pointer[1] + 1]
-      break if off_board?(next_diagonal)
+      next_diagonal = BoardCoordinator.new([pointer[0] - 1, pointer[1] + 1])
+      break if next_diagonal.off_board?
 
-      right_diagonal.unshift(next_diagonal)
-      pointer = next_diagonal
+      right_diagonal.unshift(next_diagonal.coordinates)
+      pointer = next_diagonal.coordinates
     end
 
     pointer = coordinates
     loop do
-      next_diagonal = [pointer[0] + 1, pointer[1] - 1]
-      break if off_board?(next_diagonal)
+      next_diagonal = BoardCoordinator.new([pointer[0] + 1, pointer[1] - 1])
+      break if next_diagonal.off_board?
 
-      right_diagonal.push(next_diagonal)
-      pointer = next_diagonal
+      right_diagonal.push(next_diagonal.coordinates)
+      pointer = next_diagonal.coordinates
     end
     right_diagonal
   end
 
-  def off_board?(coordinates)
-    coordinates[0] < 0 || coordinates[0] > 6 || coordinates[1] < 0 || coordinates[1] > 5
+  def off_board?
+    column_num.negative? || column_num > COL_UPPER_INDEX || row_num.negative? || row_num > ROW_UPPER_INDEX
   end
 end
 
