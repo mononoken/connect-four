@@ -4,7 +4,42 @@ In this project, we are testing our ability to code via test-driven development 
 
 I just recently read '99 Bottles of OOP' by Sandi Metz, so I am also hoping to apply the principles from that book in this project as well. These include working horizontally, reaching Shameless green, refactoring under green, SOLID principles, and many more concepts.
 
-2022-09-02
+CURRENT GOAL: Make Board open for knowing last_drop
+
+2022-09-05
+I have been struggling with this problem of making moves in the game. I have been on vacation and spending time with family which makes it hard to keep track of my thoughts, but I think that is mostly an excuse. The main problem is that my thoughts are too muddled for me to understand or use them.
+
+I am trying to implement a #game_over? check. To do so, I need to make the Board open to knowing what its last drop coordinate was.
+
+Right now, it is not open to that. The Board does not keep track of the order of moves.
+
+The moves themselves are also not really open to this. The board will find the appropriate spot to fill in given a column_num, and fill it in with the given mark. #mark allows you to see what the mark value is given coordinates but having drop fill this mark value in feels wrong.
+
+What the Board class seems to desire in this path of opening to knowing the last_drop, is to be able to do something like [0, 0].mark = 'x' or mark([0, 0]) = 'x'.
+
+2022-09-03 continue
+Starting Game tests is difficult. So, I am asking myself, what is the responsibility of Game?
+
+The responsibility of Board is to determine if the game has been won. It also has the responsibility of storing the data of the game in #columns. **(This makes me wonder, should these responsibilities be separate?) One way I think about it that makes me feel the current state is okay, is that Board's responsibility is to handle the game's data. One of the way it handles it is remembering it. Another way is analyzing it.**
+
+The responsibility of BoardCoordinator is to find lines in #columns, which helps Board to find if a win exists.
+
+The responsibility of Game is to propogate Board towards a win (or a draw) and to announce when the game has reached its conclusion.
+
+Game will propogate Board through #run_round. #run_round will be run until the goal is reached (the game is won) through #play and #game_over?. How will Game know what to propogate Board with? It will request input from the players. 
+
+Whose responsibility is it to check if player input is valid?
+
+I think this may fall into Board. Board contains the coordinates, so it would make sense that it would know which coordinates are valid and which are not.
+
+2022-09-03
+Extracting BoardCoordinator went much better than when I tried to extract Disc. I think ultimately what made it smoother was that BoardCoordinator had a single responsibility (at least I think it does lol). That responsibility is to take a coordinate return a line.
+
+I refactored BoardCoordinator out for practice and fun. The Board was already functioning as required for the game (or at least we will see if it is).
+
+That said, while there is plenty in Board still that I want to try to refactor, I will hold off for now. I am ready to start writing tests for a completely new class, Game.
+
+2022-09-02 continue
 I have a sneaking suspicion that I found the wrong abstraction when extracting the repetitive 'coordinates' parameters. These are coordinates. Cells do have coordinates, but it is it a Cell's job to know other coordinates?
 
 I think perhaps what I really wanted was a Coordinator class. The Coordinator would know given a coordinate, what coordinates relate. It would not know what 'marks' or Cells would be in those coordinates. It simply would tell you, if you want the horizontal line that contains a coordinate, here it is.

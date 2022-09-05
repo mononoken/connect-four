@@ -5,74 +5,6 @@ require_relative '../lib/board'
 # rubocop:disable Metrics/BlockLength
 
 describe Board do
-  describe '#drop' do
-    context 'when column is empty' do
-      subject(:new_board) { described_class.new }
-      it 'changes first value of the column to the mark' do
-        one_template = [
-          [nil, nil, nil, nil, nil, nil],
-          ['x', nil, nil, nil, nil, nil],
-          [nil, nil, nil, nil, nil, nil],
-          [nil, nil, nil, nil, nil, nil],
-          [nil, nil, nil, nil, nil, nil],
-          [nil, nil, nil, nil, nil, nil],
-          [nil, nil, nil, nil, nil, nil]
-        ]
-        expect { new_board.drop(1, 'x') }
-          .to change { new_board.columns }
-          .to(one_template)
-      end
-    end
-
-    context 'when column already has some marks' do
-      subject(:partial_board) { described_class.new(partial_template) }
-      let(:partial_template) do
-        [
-          [nil, nil, nil, nil, nil, nil],
-          ['x', 'o', 'x', nil, nil, nil],
-          ['o', 'x', nil, nil, nil, nil],
-          ['o', nil, nil, nil, nil, nil],
-          ['x', nil, nil, nil, nil, nil],
-          [nil, nil, nil, nil, nil, nil],
-          [nil, nil, nil, nil, nil, nil]
-        ]
-      end
-      it 'changes the next nil value of the column to the mark' do
-        filled_template = [
-          [nil, nil, nil, nil, nil, nil],
-          ['x', 'o', 'x', nil, nil, nil],
-          ['o', 'x', 'o', nil, nil, nil],
-          ['o', nil, nil, nil, nil, nil],
-          ['x', nil, nil, nil, nil, nil],
-          [nil, nil, nil, nil, nil, nil],
-          [nil, nil, nil, nil, nil, nil]
-        ]
-        expect { partial_board.drop(2, 'o') }
-          .to change { partial_board.columns }
-          .to(filled_template)
-      end
-    end
-
-    context 'when column is already full' do
-      subject(:full_board) { described_class.new(full_template) }
-      let(:full_template) do
-        [
-          ['o', 'o', 'x', 'o', 'o', 'o'],
-          ['x', 'o', 'x', 'o', 'x', 'x'],
-          ['o', 'x', 'o', 'o', 'o', 'x'],
-          ['o', 'x', 'o', 'x', 'x', 'o'],
-          ['x', 'x', 'x', 'o', 'o', 'x'],
-          ['o', 'o', 'x', 'x', 'o', 'o'],
-          ['x', 'o', 'o', 'x', 'o', 'x']
-        ]
-      end
-      it 'does not change column values' do
-        expect { full_board.drop(4, 'x') }
-          .not_to change { full_board.columns }
-      end
-    end
-  end
-
   describe '#diagonal_win?' do
     context 'when disc [4, 2] does not form a left diagonal win' do
       subject(:continue_board) { described_class.new(partial_template) }
@@ -255,6 +187,39 @@ describe Board do
       it 'returns true' do
         disc = [2, 4]
         expect(win_board.vertical_win?(disc)).to be(true)
+      end
+    end
+  end
+
+  describe '@last_drop' do
+    subject(:board) { described_class.new }
+    context "when drop(0, 'x') is sent on a new board" do
+      xit 'returns [0, 0]' do
+        expect(board.last_drop).to eq([0, 0])
+        board.drop(0, 'x')
+      end
+    end
+
+    context 'when drop is called twice' do
+      xit 'returns coordinates of the second drop' do
+        expect(board.last_drop).to eq([0, 5])
+        board.drop(0, 'x')
+        board.drop(5, 'o')
+      end
+    end
+  end
+
+  describe '#game_over?' do
+    subject(:board) { described_class.new }
+    context 'when last drop forms a win' do
+      xit 'returns true' do
+        expect(board.game_over?).to be(true)
+      end
+    end
+
+    context 'when last drop does not form a win' do
+      xit 'returns false' do
+        expect(board.game_over?).to be(false)
       end
     end
   end

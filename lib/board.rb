@@ -1,26 +1,21 @@
 # frozen_string_literal: true
 
 require 'board_coordinator'
+require 'column'
 
 # Represents a 6x7 Connect Four board.
 class Board
   attr_reader :columns
 
   def initialize(columns = Array.new(7) { Array.new(6) })
-    @columns = columns
+    @columns = columns.map { |array| Column.new(array) }
   end
 
   def column(number)
     columns[number]
   end
 
-  def drop(column_num, mark)
-    return if column_full?(column_num)
-
-    column(column_num)[first_nil(column_num)] = mark
-  end
-
-  def disc_wins?(disc, direction)
+  def four_in_a_row?(disc, direction)
     lines_of_four(direction).any? do |line_of_four|
       matching_marks?(line_of_four, mark(disc))
     end
@@ -31,37 +26,41 @@ class Board
   end
 
   def left_diagonal_win?(disc)
-    disc_wins?(disc, line(disc).left_diagonal)
+    four_in_a_row?(disc, line(disc).left_diagonal)
   end
 
   def right_diagonal_win?(disc)
-    disc_wins?(disc, line(disc).right_diagonal)
+    four_in_a_row?(disc, line(disc).right_diagonal)
   end
 
   def horizontal_win?(disc)
-    disc_wins?(disc, line(disc).horizontal)
+    four_in_a_row?(disc, line(disc).horizontal)
   end
 
   def vertical_win?(disc)
-    disc_wins?(disc, line(disc).vertical)
+    four_in_a_row?(disc, line(disc).vertical)
+  end
+
+  def any_wins?(disc)
+    vertical_win?(disc) || horizontal_win?(disc) || diagonal_win?(disc)
+  end
+
+  def last_drop
+    [0, 0]
+  end
+
+  def game_over?
+    true
   end
 
   private
 
-  def mark(coordinates)
-    columns[coordinates[0]][coordinates[1]]
-  end
-
-  def first_nil(column_num)
-    column(column_num).find_index(nil)
-  end
-
-  def column_full?(column_num)
-    column(column_num).none?(nil)
-  end
-
   def line(coordinates)
     BoardCoordinator.new(coordinates)
+  end
+
+  def mark(coordinates)
+    column(coordinates[0]).space(coordinates[1])
   end
 
   def matching_marks?(line, mark)
