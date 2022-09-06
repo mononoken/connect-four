@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
+require 'board_constants'
 require 'board_coordinator'
 require 'column'
 
 # Represents a 6x7 Connect Four board.
 class Board
-  attr_reader :columns
+  include BoardConstants
+
+  attr_reader :columns, :rounds
 
   def initialize(columns = Array.new(7) { Array.new(6) })
     @columns = columns.map { |array| Column.new(array) }
-  end
-
-  def column(number)
-    columns[number]
+    @rounds = []
   end
 
   def four_in_a_row?(disc, direction)
@@ -45,18 +45,18 @@ class Board
     vertical_win?(disc) || horizontal_win?(disc) || diagonal_win?(disc)
   end
 
-  def last_drop
-    [0, 0]
-  end
-
-  def game_over?
-    true
+  def valid_move?(column_num)
+    column(column_num).column_full?
   end
 
   private
 
   def line(coordinates)
     BoardCoordinator.new(coordinates)
+  end
+
+  def column(number)
+    columns[number]
   end
 
   def mark(coordinates)

@@ -7,35 +7,39 @@ require_relative '../lib/game'
 describe Game do
   subject(:game) { described_class.new(board) }
   let(:board) { instance_double(Board) }
-  describe '#game_over?' do
-    context 'when board.any_wins? returns false' do
+
+  describe '#valid_move?' do
+    context 'when column choice is not full on board ' do
       before do
-        allow(board).to receive(:any_wins?).and_return(false)
+        allow(board).to receive(:column_full?).and_return(false)
       end
 
-      xit 'returns false' do
-        last_move = [4, 2]
-        expect(game.game_over?).to be(false)
-        board.any_wins?(last_move)
+      it 'returns true' do
+        column_choice = 0
+        expect(game.valid_move?(column_choice)).to be(true)
       end
     end
 
-    context 'when board.any_wins? returns true' do
+    context 'when column choice is full on board' do
       before do
-        allow(board).to receive(:any_wins?).and_return(true)
+        allow(board).to receive(:column_full?).and_return(true)
       end
 
-      xit 'returns true' do
-        last_move = [4, 2]
-        expect(game.game_over?).to be(true)
-        board.any_wins?(last_move)
+      it 'returns false' do
+        column_choice = 3
+        expect(game.valid_move?(column_choice)).to be(false)
       end
+    end
+
+    context 'when column choice does not exist on board' do
+      before do
+        
     end
   end
 
-  describe '#play' do
-    context 'when #run_round?' do
-      xit 'blanks' do
+  describe '#game_over?' do
+    context 'when board.any_wins? returns true to last move' do
+      xit 'returns true' do
       end
     end
   end

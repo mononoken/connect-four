@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
+require 'board_constants'
+
 # Finds lines for a given coordinate.
 class BoardCoordinator
-  COL_QUANTITY = 7
-  ROW_QUANTITY = 6
-  COL_UPPER_INDEX = COL_QUANTITY - 1
-  ROW_UPPER_INDEX = ROW_QUANTITY - 1
+  include BoardConstants
 
   attr_reader :coordinates
 

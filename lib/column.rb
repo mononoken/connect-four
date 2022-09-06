@@ -18,13 +18,13 @@ class Column
     spaces[index]
   end
 
+  def column_full?
+    spaces.none?(nil)
+  end
+
   private
 
   def first_nil_index
     spaces.find_index(nil)
-  end
-
-  def column_full?
-    spaces.none?(nil)
   end
 end

@@ -190,39 +190,6 @@ describe Board do
       end
     end
   end
-
-  describe '@last_drop' do
-    subject(:board) { described_class.new }
-    context "when drop(0, 'x') is sent on a new board" do
-      xit 'returns [0, 0]' do
-        expect(board.last_drop).to eq([0, 0])
-        board.drop(0, 'x')
-      end
-    end
-
-    context 'when drop is called twice' do
-      xit 'returns coordinates of the second drop' do
-        expect(board.last_drop).to eq([0, 5])
-        board.drop(0, 'x')
-        board.drop(5, 'o')
-      end
-    end
-  end
-
-  describe '#game_over?' do
-    subject(:board) { described_class.new }
-    context 'when last drop forms a win' do
-      xit 'returns true' do
-        expect(board.game_over?).to be(true)
-      end
-    end
-
-    context 'when last drop does not form a win' do
-      xit 'returns false' do
-        expect(board.game_over?).to be(false)
-      end
-    end
-  end
 end
 
 # rubocop:enable Metrics/BlockLength

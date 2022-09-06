@@ -7,10 +7,9 @@ class Game
 
   def initialize(board = Board.new)
     @board = board
-    @moves = []
   end
 
-  def game_over?
-    board.game_over?
+  def valid_move?(column_num)
+    !board.column_full?(column_num)
   end
 end
