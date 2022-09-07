@@ -12,7 +12,6 @@ class Board
 
   def initialize(columns = Array.new(7) { Array.new(6) })
     @columns = columns.map { |array| Column.new(array) }
-    @rounds = []
   end
 
   def four_in_a_row?(disc, direction)
@@ -45,8 +44,12 @@ class Board
     vertical_win?(disc) || horizontal_win?(disc) || diagonal_win?(disc)
   end
 
-  def valid_move?(column_num)
-    column(column_num).column_full?
+  def valid_drop?(column_num)
+    valid_column?(column_num) && !column(column_num).column_full?
+  end
+
+  def drop(column_num, disc)
+    column(column_num).drop(disc)
   end
 
   private
@@ -73,5 +76,9 @@ class Board
     line.map.with_index do |_, index|
       line[index..index + 3] if line[index..index + 3].count == 4
     end.compact
+  end
+
+  def valid_column?(column_num)
+    (COL_LOWER_INDEX..COL_UPPER_INDEX).include?(column_num)
   end
 end
