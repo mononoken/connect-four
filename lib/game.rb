@@ -2,14 +2,19 @@
 
 require 'board'
 require 'board_constants'
+require 'player'
 
+# Represents the game, Connect Four.
 class Game
   include BoardConstants
 
-  attr_reader :board
+  attr_reader :board, :player1, :player2
+  attr_accessor :current_player
 
   def initialize(board = Board.new)
     @board = board
+    @player1 = Player.new('player1', 'o')
+    @player2 = Player.new('player2', 'x')
   end
 
   def player_turn
@@ -17,7 +22,7 @@ class Game
       choice = verify_input(player_input)
       break if choice
 
-      # Error message
+      invalid_input
     end
   end
 
@@ -25,38 +30,27 @@ class Game
     return input if valid_input?(input)
   end
 
-  def run_round
-    # set_current_player
-    player_turn
-    # drop_coordinates = drop(@choice, current_player.disc)
-    # drops.push(drop_coordinates)
-  end
-
-  def run_round
-    column_choice ||= gets.chomp
-    return unless valid_input?(column_choice)
-
-    drop_coordinates = drop(column_choice, 'disc')
-    drops.push(drop_coordinates)
-  end
-
   def valid_input?(input)
     (COL_LOWER_INDEX.to_s..COL_UPPER_INDEX.to_s).include?(input) &&
       board.valid_drop?(input.to_i)
   end
 
+  def switch_current_player
+    if current_player == player1
+      self.current_player = player2
+    else
+      self.current_player = player1
+    end
+  end
+
   private
 
   def player_input
-    puts 'Choose a column row (between 0 and 6)'
+    puts 'Choose a column between 0 and 6 to drop your disc.'
     gets.chomp
   end
 
-  # def drops
-  #   @drops ||= []
-  # end
-
-  # def drop(column_num, disc)
-  #   board.drop(column_num, disc)
-  # end
+  def invalid_input
+    puts 'Invalid input! Choose a column between 0 and 6 to drop your disc.'
+  end
 end

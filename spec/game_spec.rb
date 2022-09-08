@@ -5,9 +5,9 @@ require_relative '../lib/game'
 # rubocop:disable Metrics/BlockLength
 
 describe Game do
-  describe '#verify_input' do
-    subject(:game) { described_class.new }
+  subject(:game) { described_class.new }
 
+  describe '#verify_input' do
     context 'when player input is valid column 3' do
       it 'returns player input' do
         player_input = '3'
@@ -42,8 +42,6 @@ describe Game do
   end
 
   describe '#player_turn' do
-    subject(:game) { described_class.new }
-
     context 'when player input is valid on first loop' do
       before do
         allow(game).to receive(:verify_input)
@@ -82,10 +80,22 @@ describe Game do
         game.player_turn
       end
     end
+
+    context 'when player input is invalid 4 times and then valid' do
+      before do
+        allow(game).to receive(:verify_input)
+          .and_return(false, false, false, false, true)
+        allow(game).to receive(:puts)
+      end
+
+      it 'sends invalid_input msg 4 times' do
+        expect(game).to receive(:invalid_input).exactly(4).times
+        game.player_turn
+      end
+    end
   end
 
   describe '#valid_input?' do
-    subject(:game) { described_class.new }
     context "when input is '0'" do
       it 'returns true' do
         valid_input = '0'
@@ -118,6 +128,30 @@ describe Game do
       it 'returns false' do
         invalid_input = 0
         expect(game.valid_input?(invalid_input)).to be(false)
+      end
+    end
+  end
+
+  describe '#switch_current_player' do
+    context 'when current_player is player1' do
+      before do
+        game.current_player = game.player1
+      end
+
+      it 'sets current_player to player2' do
+        expect { game.switch_current_player }.to change { game.current_player }
+          .from(game.player1).to(game.player2)
+      end
+    end
+
+    context 'when current_player is player2' do
+      before do
+        game.current_player = game.player2
+      end
+
+      it 'sets current_player to player1' do
+        expect { game.switch_current_player }.to change { game.current_player }
+          .from(game.player2).to(game.player1)
       end
     end
   end
