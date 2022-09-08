@@ -45,7 +45,7 @@ class Board
   end
 
   def valid_drop?(column_num)
-    valid_column?(column_num) && !column(column_num).column_full?
+    valid_column?(column_num) && !column(column_num).full?
   end
 
   def drop(column_num, disc)

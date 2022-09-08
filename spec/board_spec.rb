@@ -190,6 +190,43 @@ describe Board do
       end
     end
   end
+
+  describe 'valid_drop?' do
+    subject(:board) { described_class.new }
+    context 'when column_num is 0 and game is new' do
+      it 'returns true' do
+        column_num = 0
+        expect(board.valid_drop?(column_num)).to be(true)
+      end
+    end
+
+    context 'when column_num is 55 and game is new' do
+      it 'returns false' do
+        column_num = 55
+        expect(board.valid_drop?(column_num)).to be(false)
+      end
+    end
+
+    context 'when valid column_num is 3 and selected column is full' do
+      subject(:filled_board) { described_class.new(columns) }
+      let(:columns) do
+        [
+          [nil, nil, nil, nil, nil, nil],
+          ['x', 'o', 'x', nil, nil, nil],
+          ['o', 'x', 'x', nil, nil, nil],
+          ['o', 'o', 'x', 'o', 'x', 'x'],
+          ['x', 'o', 'o', nil, nil, nil],
+          [nil, nil, nil, nil, nil, nil],
+          [nil, nil, nil, nil, nil, nil]
+        ]
+      end
+
+      it 'returns false' do
+        column_num = 3
+        expect(filled_board.valid_drop?(column_num)).to be(false)
+      end
+    end
+  end
 end
 
 # rubocop:enable Metrics/BlockLength
