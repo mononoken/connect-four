@@ -8,16 +8,10 @@ require 'column'
 class Board
   include BoardConstants
 
-  attr_reader :columns, :rounds
+  attr_reader :columns
 
   def initialize(columns = Array.new(7) { Array.new(6) })
     @columns = columns.map { |array| Column.new(array) }
-  end
-
-  def four_in_a_row?(disc, direction)
-    lines_of_four(direction).any? do |line_of_four|
-      matching_marks?(line_of_four, mark(disc))
-    end
   end
 
   def diagonal_win?(disc)
@@ -64,6 +58,12 @@ class Board
 
   def mark(coordinates)
     column(coordinates[0]).space(coordinates[1])
+  end
+
+  def four_in_a_row?(disc, direction)
+    lines_of_four(direction).any? do |line_of_four|
+      matching_marks?(line_of_four, mark(disc))
+    end
   end
 
   def matching_marks?(line, mark)
