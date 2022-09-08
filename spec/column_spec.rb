@@ -39,6 +39,31 @@ describe Column do
       end
     end
   end
+
+  describe '#full?' do
+    context 'when column is empty' do
+      subject(:new_column) { described_class.new }
+      it 'returns false' do
+        expect(new_column.full?).to be(false)
+      end
+    end
+
+    context 'when column is partially full' do
+      subject(:partial_column) { described_class.new(some_discs) }
+      let(:some_discs) { ['x', 'o', 'o', nil, nil, nil] }
+      it 'returns false' do
+        expect(partial_column.full?).to be(false)
+      end
+    end
+
+    context 'when column is full' do
+      subject(:full_column) { described_class.new(all_discs) }
+      let(:all_discs) { ['x', 'o', 'o', 'o', 'x', 'x'] }
+      it 'returns true' do
+        expect(full_column.full?).to be(true)
+      end
+    end
+  end
 end
 
 # rubocop:enable Metrics/BlockLength

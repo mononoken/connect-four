@@ -17,12 +17,12 @@ class Column
     [number, dropped_index]
   end
 
-  def space(index)
-    spaces[index]
-  end
-
   def full?
     spaces.none?(nil)
+  end
+
+  def space(index)
+    spaces[index]
   end
 
   private
