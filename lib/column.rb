@@ -2,23 +2,26 @@
 
 # Represents a column on a Connect Four board.
 class Column
-  attr_reader :spaces
+  attr_reader :spaces, :number
 
-  def initialize(spaces = Array.new(6))
+  def initialize(spaces = Array.new(6), column_num = nil)
     @spaces = spaces
+    @number = column_num
   end
 
   def drop(disc)
-    return if column_full?
+    return if full?
 
+    dropped_index = first_nil_index
     spaces[first_nil_index] = disc
+    [number, dropped_index]
   end
 
   def space(index)
     spaces[index]
   end
 
-  def column_full?
+  def full?
     spaces.none?(nil)
   end
 
