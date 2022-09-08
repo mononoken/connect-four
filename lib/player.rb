@@ -2,10 +2,10 @@
 
 # Represent a player in Connect Four
 class Player
-  attr_reader :name, :mark
+  attr_reader :name, :disc
 
-  def initialize(name, mark)
+  def initialize(name, disc)
     @name = name
-    @mark = mark
+    @disc = disc
   end
 end
