@@ -38,6 +38,8 @@ class Board
   end
 
   def any_wins?(disc = last_disc)
+    return false if disc.nil?
+
     vertical_win?(disc) || horizontal_win?(disc) || diagonal_win?(disc)
   end
 

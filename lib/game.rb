@@ -18,14 +18,18 @@ class Game
     @players = [player1, player2]
   end
 
+  # incomplete
   def play
     setup
     run_rounds
-    finish # incomplete
+    finish
   end
 
   def run_rounds
-    run_round until game_over?
+    until game_over?
+      switch_current_player
+      run_round
+    end
   end
 
   def game_over?
@@ -62,9 +66,12 @@ class Game
         player2
       when player2
         player1
+      when nil
+        random_player
       end
   end
 
+  # Unnecessary?
   def choose_current_player(player)
     self.current_player = player
   end
@@ -93,6 +100,10 @@ class Game
   end
 
   def setup
+    puts instructions
+  end
+
+  def instructions
     <<~INSTRUCTIONS
       Welcome to Connect Four!
       Pick a column number (0, 1, 2... 6) to drop your disc in the column.
