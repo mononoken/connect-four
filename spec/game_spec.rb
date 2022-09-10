@@ -7,6 +7,69 @@ require_relative '../lib/game'
 describe Game do
   subject(:game) { described_class.new }
 
+  describe '#run_round' do
+    subject(:new_game) { described_class.new(new_board, player_x, player_o) }
+    let(:new_board) { instance_double(Board) }
+    let(:player_x) { instance_double(Player, name: 'player_x', disc: 'x') }
+    let(:player_o) { instance_double(Player, name: 'player_o', disc: 'o') }
+
+    context 'when player_turn receives valid input' do
+      let(:valid_input) { '2' }
+      before :each do
+        new_game.instance_variable_set(:@current_player, player_x)
+        allow(new_game).to receive(:player_input).and_return(valid_input)
+      end
+
+      it 'sends #drop to board with valid choice and current_player.disc' do
+        current_player_disc = new_game.current_player.disc
+
+        expect(new_board).to receive(:drop)
+          .with(valid_input, current_player_disc).once
+        new_game.run_round
+      end
+    end
+  end
+
+  describe '#current_player_choice' do
+    subject(:new_game) { described_class.new }
+    context 'when player_turn has not been called' do
+      it 'returns nil' do
+        expect(new_game.current_player_choice).to be(nil)
+      end
+    end
+
+    context 'when player_turn receives valid input' do
+      subject(:game_round) { described_class.new }
+      let(:valid_input) { '3' }
+
+      before do
+        allow(game_round).to receive(:player_input)
+          .and_return(valid_input)
+        game_round.player_turn
+      end
+
+      it 'returns valid_input' do
+        expect(game_round.current_player_choice).to eq(valid_input)
+      end
+    end
+
+    context 'when player_turn receives invalid input and then valid input' do
+      subject(:game_round) { described_class.new }
+      let(:invalid_input) { 'woooow' }
+      let(:valid_input) { '0' }
+
+      before do
+        allow(game_round).to receive(:player_input)
+          .and_return(invalid_input, valid_input)
+        game_round.player_turn
+      end
+
+      it 'returns valid_input' do
+        expect(game_round.current_player_choice).to eq(valid_input)
+      end
+    end
+  end
+
   describe '#verify_input' do
     context 'when player input is valid column 3' do
       it 'returns player input' do
@@ -152,6 +215,52 @@ describe Game do
       it 'sets current_player to player1' do
         expect { game.switch_current_player }.to change { game.current_player }
           .from(game.player2).to(game.player1)
+      end
+    end
+  end
+
+  describe '#choose_current_player' do
+    context 'when current_player selected is player1' do
+      it 'sets current_player to player1' do
+        selected_player = game.player1
+        expect { game.choose_current_player(selected_player) }
+          .to change { game.current_player }.to(selected_player)
+      end
+    end
+
+    context 'when current_player selected is player2' do
+      it 'sets current_player to player2' do
+        selected_player = game.player2
+        expect { game.choose_current_player(selected_player) }
+          .to change { game.current_player }.to(selected_player)
+      end
+    end
+  end
+
+  describe '#random_player' do
+    context 'when called once with seed 1234' do
+      before do
+        srand(1234)
+      end
+
+      it 'returns player2' do
+        expected_player = game.player2
+        random_player = game.random_player
+        expect(random_player).to be(expected_player)
+      end
+    end
+
+    context 'when called three times with seed 1234' do
+      before do
+        srand(1234)
+      end
+
+      it 'returns player1' do
+        expected_player = game.player1
+        game.random_player
+        game.random_player
+        random_player = game.random_player
+        expect(random_player).to be(expected_player)
       end
     end
   end

@@ -8,19 +8,26 @@ require 'player'
 class Game
   include BoardConstants
 
-  attr_reader :board, :player1, :player2
-  attr_accessor :current_player
+  attr_reader :board, :players
+  attr_accessor :current_player, :current_player_choice
 
-  def initialize(board = Board.new)
+  def initialize(board: Board.new,
+                 player1: Player.new(name: 'player1', disc: 'o'),
+                 player2: Player.new(name: 'player2', disc: 'x'))
     @board = board
-    @player1 = Player.new('player1', 'o')
-    @player2 = Player.new('player2', 'x')
+    @players = [player1, player2]
+  end
+
+  def run_round
+    # player_turn
+    # board.drop(current_player_choice, current_player.disc)
+    board.drop(3, 'x')
   end
 
   def player_turn
     loop do
-      choice = verify_input(player_input)
-      break if choice
+      self.current_player_choice = verify_input(player_input)
+      break if current_player_choice
 
       invalid_input
     end
@@ -36,11 +43,29 @@ class Game
   end
 
   def switch_current_player
-    if current_player == player1
-      self.current_player = player2
-    else
-      self.current_player = player1
-    end
+    self.current_player =
+      case current_player
+      when player1
+        player2
+      when player2
+        player1
+      end
+  end
+
+  def choose_current_player(player)
+    self.current_player = player
+  end
+
+  def random_player
+    players[rand(players.count)]
+  end
+
+  def player1
+    players[0]
+  end
+
+  def player2
+    players[1]
   end
 
   private
