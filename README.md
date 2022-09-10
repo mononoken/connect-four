@@ -4,7 +4,12 @@ In this project, we are testing our ability to code via test-driven development 
 
 I just recently read '99 Bottles of OOP' by Sandi Metz, so I am also hoping to apply the principles from that book in this project as well. These include working horizontally, reaching Shameless green, refactoring under green, SOLID principles, and many more concepts.
 
-CURRENT GOAL: Make Board open for knowing last_drop
+2022-09-10
+I have been seeing lots of family, so it's been hard to work on this project continuously. I think this is good practice though for working on a project in chunks instead of straight through in one go.
+
+I have the game working now. I had spent some time trying to write methods in a not TDD way, but I reverted back to TDD all the way through even though it seems silly sometimes. The mindset is helpful in keeping me on track.
+
+Some methods seem silly to write a test for, but I think these sometimes especially benefit from writing the test first. The test make it clear to me what I am thinking is the purpose of the new method. Sometimes, I realize that I am thinking of a method doing multiple things, and many times when I ask should they be multiple methods? I have almost always answered yes to this, which leads me to realizing I need to write a smaller method before the desired one.
 
 2022-09-05
 I have been struggling with this problem of making moves in the game. I have been on vacation and spending time with family which makes it hard to keep track of my thoughts, but I think that is mostly an excuse. The main problem is that my thoughts are too muddled for me to understand or use them.
