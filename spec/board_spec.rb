@@ -191,7 +191,7 @@ describe Board do
     end
   end
 
-  describe 'valid_drop?' do
+  describe '#valid_drop?' do
     subject(:board) { described_class.new }
     context 'when column_num is 0 and game is new' do
       it 'returns true' do
@@ -224,6 +224,133 @@ describe Board do
       it 'returns false' do
         column_num = 3
         expect(filled_board.valid_drop?(column_num)).to be(false)
+      end
+    end
+  end
+
+  describe '#any_wins?' do
+    context 'when drop is specified on a disc with no wins' do
+      subject(:continue_board) { described_class.new(partial_template) }
+      let(:partial_template) do
+        [
+          [nil, nil, nil, nil, nil, nil],
+          ['x', 'o', 'x', nil, nil, nil],
+          ['o', 'x', 'x', nil, nil, nil],
+          ['o', 'o', 'x', nil, nil, nil],
+          ['x', 'o', 'o', nil, nil, nil],
+          [nil, nil, nil, nil, nil, nil],
+          [nil, nil, nil, nil, nil, nil]
+        ]
+      end
+
+      it 'returns false' do
+        coordinates = [2, 2]
+        expect(continue_board.any_wins?(coordinates)).to be(false)
+      end
+    end
+
+    context 'when drop is specfied on a disc with a win' do
+      subject(:win_board) { described_class.new(win_template) }
+      let(:win_template) do
+        [
+          [nil, nil, nil, nil, nil, nil],
+          ['x', 'o', 'x', nil, nil, nil],
+          ['o', 'x', 'x', nil, nil, nil],
+          ['o', 'o', 'x', nil, nil, nil],
+          ['x', 'o', 'o', nil, nil, nil],
+          ['o', 'x', 'x', 'o', nil, nil],
+          [nil, nil, nil, nil, nil, nil]
+        ]
+      end
+
+      it 'returns false' do
+        win_coordinates = [5, 3]
+        expect(win_board.any_wins?(win_coordinates)).to be(true)
+      end
+    end
+
+    context 'when drop was last called on not a winning move' do
+      subject(:continue_board) { described_class.new(continue_template) }
+      let(:continue_template) do
+        [
+          [nil, nil, nil, nil, nil, nil],
+          ['x', 'o', 'x', nil, nil, nil],
+          ['o', 'x', 'x', nil, nil, nil],
+          ['o', 'x', 'x', nil, nil, nil],
+          ['x', 'x', 'o', nil, nil, nil],
+          [nil, nil, nil, nil, nil, nil],
+          [nil, nil, nil, nil, nil, nil]
+        ]
+      end
+      let(:continue_move) { 1 }
+      let(:continue_disc) { 'o' }
+
+      before do
+        continue_board.drop(continue_move, continue_disc)
+      end
+
+      it 'returns false' do
+        expect(continue_board.any_wins?).to be(false)
+      end
+    end
+
+    context 'when drop was last called on a winning move' do
+      subject(:win_board) { described_class.new(win_template) }
+      let(:win_template) do
+        [
+          [nil, nil, nil, nil, nil, nil],
+          ['x', 'o', 'x', nil, nil, nil],
+          ['o', 'x', 'x', nil, nil, nil],
+          ['o', 'x', 'x', nil, nil, nil],
+          ['o', 'x', 'o', nil, nil, nil],
+          [nil, nil, nil, nil, nil, nil],
+          [nil, nil, nil, nil, nil, nil]
+        ]
+      end
+      let(:winning_move) { 5 }
+      let(:winning_disc) { 'o' }
+
+      before do
+        win_board.drop(winning_move, winning_disc)
+      end
+
+      it 'returns true' do
+        expect(win_board.any_wins?).to be(true)
+      end
+    end
+  end
+
+  describe '#drop' do
+    context 'when sent with column choice 5 on a new board' do
+      subject(:new_board) { described_class.new }
+      let(:column_choice) { 2 }
+      let(:disc) { 'x' }
+
+      it 'sets self.last_disc to drop coordinates' do
+        drop_coordinates = new_board.drop(column_choice, disc)
+        expect(new_board.last_disc).to eq(drop_coordinates)
+      end
+    end
+
+    context 'when sent with column choice 3 on active board' do
+      subject(:active_board) { described_class.new(active_template) }
+      let(:active_template) do
+        [
+          [nil, nil, nil, nil, nil, nil],
+          ['x', 'o', 'x', nil, nil, nil],
+          ['o', 'x', 'x', nil, nil, nil],
+          ['o', 'x', 'x', nil, nil, nil],
+          ['x', 'x', 'o', nil, nil, nil],
+          [nil, nil, nil, nil, nil, nil],
+          [nil, nil, nil, nil, nil, nil]
+        ]
+      end
+      let(:column_choice) { 1 }
+      let(:disc) { 'o' }
+
+      it 'sets self.last_disc to drop coordinates' do
+        drop_coordinates = active_board.drop(column_choice, disc)
+        expect(active_board.last_disc).to eq(drop_coordinates)
       end
     end
   end

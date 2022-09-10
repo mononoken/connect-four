@@ -9,9 +9,12 @@ class Board
   include BoardConstants
 
   attr_reader :columns
+  attr_accessor :last_disc
 
   def initialize(columns = Array.new(7) { Array.new(6) })
-    @columns = columns.map { |array| Column.new(array) }
+    @columns = columns.map.with_index do |array, index|
+      Column.new(array, index)
+    end
   end
 
   def diagonal_win?(disc)
@@ -34,7 +37,7 @@ class Board
     four_in_a_row?(disc, line(disc).vertical)
   end
 
-  def any_wins?(disc)
+  def any_wins?(disc = last_disc)
     vertical_win?(disc) || horizontal_win?(disc) || diagonal_win?(disc)
   end
 
@@ -43,7 +46,7 @@ class Board
   end
 
   def drop(column_num, disc)
-    column(column_num).drop(disc)
+    self.last_disc = column(column_num).drop(disc)
   end
 
   private
