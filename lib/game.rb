@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'board'
-require 'board_constants'
-require 'player'
+require_relative 'board'
+require_relative 'board_constants'
+require_relative 'player'
 
 # Represents the game, Connect Four.
 class Game
@@ -18,10 +18,23 @@ class Game
     @players = [player1, player2]
   end
 
+  def play
+    setup
+    run_rounds
+    finish # incomplete
+  end
+
+  def run_rounds
+    run_round until game_over?
+  end
+
+  def game_over?
+    board.any_wins?
+  end
+
   def run_round
-    # player_turn
-    # board.drop(current_player_choice, current_player.disc)
-    board.drop(3, 'x')
+    player_turn
+    board.drop(current_player_choice.to_i, current_player.disc)
   end
 
   def player_turn
@@ -77,5 +90,19 @@ class Game
 
   def invalid_input
     puts 'Invalid input! Choose a column between 0 and 6 to drop your disc.'
+  end
+
+  def setup
+    <<~INSTRUCTIONS
+      Welcome to Connect Four!
+      Pick a column number (0, 1, 2... 6) to drop your disc in the column.
+      Players will take turns dropping their discs on the board.
+      You can make a row horizontally, vertically, and diagonally.
+      When one player has four discs in a row they win!
+    INSTRUCTIONS
+  end
+
+  def finish
+    'Winner wins!'
   end
 end

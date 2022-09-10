@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'board_constants'
+require_relative 'board_constants'
 
 # Finds lines for a given coordinate.
 class BoardCoordinator

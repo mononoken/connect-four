@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'board_constants'
-require 'board_coordinator'
-require 'column'
+require_relative 'board_constants'
+require_relative 'board_coordinator'
+require_relative 'column'
 
 # Represents a 6x7 Connect Four board.
 class Board

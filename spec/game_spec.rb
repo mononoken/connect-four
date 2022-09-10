@@ -7,25 +7,102 @@ require_relative '../lib/game'
 describe Game do
   subject(:game) { described_class.new }
 
+  describe '#run_rounds' do
+    context 'when #game_over is false once and then true' do
+      subject(:one_round_game) { described_class.new }
+
+      before do
+        allow(one_round_game).to receive(:game_over?)
+          .and_return(false, true)
+      end
+
+      it 'sends run_round once and stops' do
+        expect(one_round_game).to receive(:run_round).once
+        one_round_game.run_rounds
+      end
+    end
+
+    context 'when #game_over is false three times and then true' do
+      subject(:three_round_game) { described_class.new }
+
+      before do
+        allow(three_round_game).to receive(:game_over?)
+          .and_return(false, false, false, true)
+      end
+
+      it 'sends run_round three times and stops' do
+        expect(three_round_game).to receive(:run_round).exactly(3).times
+        three_round_game.run_rounds
+      end
+    end
+  end
+
+  describe '#game_over?' do
+    context 'when board receives any_wins? and returns false' do
+      subject(:continue_game) { described_class.new(board: continue_board) }
+      let(:continue_board) { instance_double(Board) }
+
+      before do
+        allow(continue_board).to receive(:any_wins?).and_return(false)
+      end
+
+      it 'returns true' do
+        expect(continue_game.game_over?).to be(false)
+      end
+    end
+
+    context 'when board receives any_wins? and returns true' do
+      subject(:win_game) { described_class.new(board: win_board) }
+      let(:win_board) { instance_double(Board) }
+      before do
+        allow(win_board).to receive(:any_wins?).and_return(true)
+      end
+
+      it 'returns true' do
+        expect(win_game.game_over?).to be(true)
+      end
+    end
+  end
+
   describe '#run_round' do
-    subject(:new_game) { described_class.new(new_board, player_x, player_o) }
-    let(:new_board) { instance_double(Board) }
+    subject(:game) do
+      described_class.new(player1: player_x,
+                          player2: player_o)
+    end
     let(:player_x) { instance_double(Player, name: 'player_x', disc: 'x') }
     let(:player_o) { instance_double(Player, name: 'player_o', disc: 'o') }
 
     context 'when player_turn receives valid input' do
       let(:valid_input) { '2' }
       before :each do
-        new_game.instance_variable_set(:@current_player, player_x)
-        allow(new_game).to receive(:player_input).and_return(valid_input)
+        game.instance_variable_set(:@current_player, player_x)
+        allow(game).to receive(:player_input).and_return(valid_input)
       end
 
       it 'sends #drop to board with valid choice and current_player.disc' do
-        current_player_disc = new_game.current_player.disc
+        valid_choice = valid_input.to_i
+        current_player_disc = game.current_player.disc
 
-        expect(new_board).to receive(:drop)
-          .with(valid_input, current_player_disc).once
-        new_game.run_round
+        expect(game.board).to receive(:drop)
+          .with(valid_choice, current_player_disc).once
+        game.run_round
+      end
+    end
+
+    context 'when player_turn receives valid input' do
+      let(:valid_input) { '4' }
+      before :each do
+        game.instance_variable_set(:@current_player, player_o)
+        allow(game).to receive(:player_input).and_return(valid_input)
+      end
+
+      it 'sends #drop to board with valid choice and current_player.disc' do
+        valid_choice = valid_input.to_i
+        current_player_disc = game.current_player.disc
+
+        expect(game.board).to receive(:drop)
+          .with(valid_choice, current_player_disc).once
+        game.run_round
       end
     end
   end
