@@ -13,7 +13,7 @@ class Board
 
   def initialize(columns = Array.new(7) { Array.new(6) })
     @columns = columns.map.with_index do |array, index|
-      Column.new(array, index)
+      Column.new(spaces: array, column_num: index)
     end
   end
 

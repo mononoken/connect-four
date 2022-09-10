@@ -4,7 +4,7 @@
 class Column
   attr_reader :spaces, :number
 
-  def initialize(spaces = Array.new(6), column_num = nil)
+  def initialize(spaces: Array.new(6), column_num: nil)
     @spaces = spaces
     @number = column_num
   end
