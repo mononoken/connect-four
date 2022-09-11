@@ -51,14 +51,14 @@ class Board
     self.last_disc = column(column_num).drop(disc)
   end
 
+  def column(number)
+    columns[number]
+  end
+
   private
 
   def line(coordinates)
     BoardCoordinator.new(coordinates)
-  end
-
-  def column(number)
-    columns[number]
   end
 
   def mark(coordinates)
