@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'board'
+require_relative 'board_visualizer'
 require_relative 'board_constants'
 require_relative 'player'
 
@@ -29,6 +30,7 @@ class Game
     until game_over?
       switch_current_player
       run_round
+      show_board
     end
   end
 
@@ -76,6 +78,10 @@ class Game
     self.current_player = player
   end
 
+  def winner
+    current_player if game_over?
+  end
+
   def random_player
     players[rand(players.count)]
   end
@@ -86,6 +92,10 @@ class Game
 
   def player2
     players[1]
+  end
+
+  def display
+    BoardVisualizer.new(board: self).display
   end
 
   private
@@ -101,6 +111,11 @@ class Game
 
   def setup
     puts instructions
+    show_board
+  end
+
+  def show_board
+    puts board.display
   end
 
   def instructions

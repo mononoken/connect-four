@@ -107,6 +107,35 @@ describe Game do
     end
   end
 
+  # Incomplete
+  describe '#winner' do
+    context 'when game_over? is false' do
+      subject(:new_game) { described_class.new }
+
+      before do
+        allow(new_game).to receive(:game_over?).and_return(false)
+      end
+
+      it 'returns nil' do
+        expect(new_game.winner).to be(nil)
+      end
+    end
+
+    context 'when game_over? is true' do
+      subject(:won_game) { described_class.new }
+      let(:player1) { instance_double(Player, name: 'player1', disc: 'o') }
+
+      before do
+        allow(won_game).to receive(:game_over?).and_return(true)
+        won_game.instance_variable_set(:@current_player, player1)
+      end
+
+      it 'returns value of current_player' do
+        expect(won_game.winner).to eq(won_game.current_player)
+      end
+    end
+  end
+
   describe '#current_player_choice' do
     subject(:new_game) { described_class.new }
     context 'when player_turn has not been called' do
