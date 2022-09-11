@@ -15,13 +15,13 @@ describe BoardVisualizer do
       it 'returns empty display' do
         empty_display =
           <<~EMPTY_TEMPLATE
-            | | | | | | | |
-            | | | | | | | |
-            | | | | | | | |
-            | | | | | | | |
-            | | | | | | | |
-            | | | | | | | |
-            |0|1|2|3|4|5|6|
+            || | | | | | | ||
+            || | | | | | | ||
+            || | | | | | | ||
+            || | | | | | | ||
+            || | | | | | | ||
+            || | | | | | | ||
+            ||0|1|2|3|4|5|6||
           EMPTY_TEMPLATE
 
         expect(empty_visualizer.display).to eq(empty_display)
@@ -38,13 +38,13 @@ describe BoardVisualizer do
       it "returns display with x's at the bottom" do
         bottom_x_display =
           <<~BOTTOM_X_TEMPLATE
-            | | | | | | | |
-            | | | | | | | |
-            | | | | | | | |
-            | | | | | | | |
-            | | | | | | | |
-            |x|x|x|x|x|x|x|
-            |0|1|2|3|4|5|6|
+            || | | | | | | ||
+            || | | | | | | ||
+            || | | | | | | ||
+            || | | | | | | ||
+            || | | | | | | ||
+            ||x|x|x|x|x|x|x||
+            ||0|1|2|3|4|5|6||
           BOTTOM_X_TEMPLATE
 
         expect(bottom_x_visualizer.display).to eq(bottom_x_display)

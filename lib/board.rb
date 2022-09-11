@@ -55,6 +55,11 @@ class Board
     columns[number]
   end
 
+  # Write tests
+  def data
+    columns.map(&:spaces).flatten
+  end
+
   private
 
   def line(coordinates)
