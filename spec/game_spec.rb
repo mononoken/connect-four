@@ -107,6 +107,50 @@ describe Game do
     end
   end
 
+  describe 'draw?' do
+    context 'when board is not full' do
+      subject(:incomplete_game) { described_class.new(board: incomplete_board) }
+      let(:incomplete_board) { instance_double(Board) }
+
+      before do
+        allow(incomplete_board).to receive(:full?).and_return(false)
+      end
+
+      it 'return false' do
+        expect(incomplete_game.draw?).to be(false)
+      end
+    end
+
+    context 'when board is full and there is no winner' do
+      subject(:full_game) { described_class.new(board: full_board) }
+      let(:full_board) { instance_double(Board) }
+
+      before do
+        allow(full_board).to receive(:full?).and_return(true)
+        allow(full_game).to receive(:winner).and_return(nil)
+      end
+
+      it 'returns true' do
+        expect(full_game.draw?).to be(true)
+      end
+    end
+
+    context 'when board is full and there is a winner' do
+      subject(:won_game) { described_class.new(board: won_board) }
+      let(:won_board) { instance_double(Board) }
+      let(:winner) { instance_double(Player) }
+
+      before do
+        allow(won_board).to receive(:full?).and_return(true)
+        allow(won_game).to receive(:winner).and_return(winner)
+      end
+
+      it 'returns false' do
+        expect(won_game.draw?).to be(false)
+      end
+    end
+  end
+
   # Incomplete
   describe '#winner' do
     context 'when game_over? is false' do

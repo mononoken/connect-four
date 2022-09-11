@@ -354,6 +354,34 @@ describe Board do
       end
     end
   end
+
+  describe '#full?' do
+    context 'when all columns are full' do
+      subject(:full_board) { described_class.new(full_template) }
+      let(:full_template) { Array.new(7) { Array.new(6) { 'x' } } }
+
+      it 'returns true' do
+        expect(full_board.full?).to be(true)
+      end
+    end
+
+    context 'when all columns are empty' do
+      subject(:empty_board) { described_class.new }
+
+      it 'returns false' do
+        expect(empty_board.full?).to be(false)
+      end
+    end
+
+    context 'when columns are partially full' do
+      subject(:partial_board) { described_class.new(partial_template) }
+      let(:partial_template) { Array.new(7) { ['x', 'o', nil, nil, nil, nil] } }
+
+      it 'returns false' do
+        expect(partial_board.full?).to be(false)
+      end
+    end
+  end
 end
 
 # rubocop:enable Metrics/BlockLength

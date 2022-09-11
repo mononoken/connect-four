@@ -4,6 +4,17 @@ In this project, we are testing our ability to code via test-driven development 
 
 I just recently read '99 Bottles of OOP' by Sandi Metz, so I am also hoping to apply the principles from that book in this project as well. These include working horizontally, reaching Shameless green, refactoring under green, SOLID principles, and many more concepts.
 
+2022-09-11
+An example of why I love TDD:
+1. I want to build the method #draw? for my Game class.
+2. I have to write tests for this method if I want it. The first test I can think of, is that I want the method to return false if the board is not full.
+* I note in my head, that the reason the board not being full is a signal for draw? status is because the game is not over yet. I think about how this could affect my game_over? method but keep on the "horizontal" path and keep this "vertical" thought for later.
+3. Is my code currently open to knowing if board is full? No. This signals to me that the Board class needs some work.
+4. I switch to Board. What I want is a #full? method for Board.
+5. I start a test for Board#full?. I want this method to return true if every Column in board is full.
+6. Is the Column class open to this? Yes. I can see that the path forward is probably to use an Enumerator to check each Column returns true to #full?, but I stay with the prescribed steps and write the tests first.
+7. Once I write Board#full? tests and have them passing, I now have a method to help get my original goal of writing Game#draw? tests.
+
 2022-09-10
 I have been seeing lots of family, so it's been hard to work on this project continuously. I think this is good practice though for working on a project in chunks instead of straight through in one go.
 

@@ -55,6 +55,10 @@ class Board
     columns[number]
   end
 
+  def full?
+    columns.all?(&:full?)
+  end
+
   # Write tests
   def data
     columns.map(&:spaces).flatten

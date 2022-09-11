@@ -38,6 +38,10 @@ class Game
     board.any_wins?
   end
 
+  def draw?
+    board.full? && winner.nil?
+  end
+
   def run_round
     player_turn
     board.drop(current_player_choice.to_i, current_player.disc)
