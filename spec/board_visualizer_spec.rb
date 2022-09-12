@@ -21,13 +21,13 @@ describe BoardVisualizer do
             || | | | | | | ||
             || | | | | | | ||
             || | | | | | | ||
-            ||0|1|2|3|4|5|6||
+            ||1|2|3|4|5|6|7||
           EMPTY_TEMPLATE
 
         expect(empty_visualizer.display).to eq(empty_display)
       end
     end
-
+g
     context 'when each board column has one x filled in' do
       subject(:bottom_x_visualizer) do
         described_class.new(board: bottom_x_board)
@@ -44,7 +44,7 @@ describe BoardVisualizer do
             || | | | | | | ||
             || | | | | | | ||
             ||x|x|x|x|x|x|x||
-            ||0|1|2|3|4|5|6||
+            ||1|2|3|4|5|6|7||
           BOTTOM_X_TEMPLATE
 
         expect(bottom_x_visualizer.display).to eq(bottom_x_display)

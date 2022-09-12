@@ -1,28 +1,35 @@
 # frozen_string_literal: true
 
 require_relative 'board'
+require_relative 'board_constants'
 
 # Visual display of Board for Connect Four.
 class BoardVisualizer
+  include BoardConstants
+
   attr_reader :board
 
   def initialize(board:)
     @board = board
   end
 
+  def column_numbers
+    (LOWER_INPUT..UPPER_INPUT).to_a
+  end
+
   def converted_data(data = board.data)
     data.map { |disc| disc.nil? ? ' ' : disc }
   end
 
-  def display
+  def display(data = converted_data, labels = column_numbers)
     <<~TEMPLATE
-      ||#{converted_data[5]}|#{converted_data[11]}|#{converted_data[17]}|#{converted_data[23]}|#{converted_data[29]}|#{converted_data[35]}|#{converted_data[41]}||
-      ||#{converted_data[4]}|#{converted_data[10]}|#{converted_data[16]}|#{converted_data[22]}|#{converted_data[28]}|#{converted_data[34]}|#{converted_data[40]}||
-      ||#{converted_data[3]}|#{converted_data[9]}|#{converted_data[15]}|#{converted_data[21]}|#{converted_data[27]}|#{converted_data[33]}|#{converted_data[39]}||
-      ||#{converted_data[2]}|#{converted_data[8]}|#{converted_data[14]}|#{converted_data[20]}|#{converted_data[26]}|#{converted_data[32]}|#{converted_data[38]}||
-      ||#{converted_data[1]}|#{converted_data[7]}|#{converted_data[13]}|#{converted_data[19]}|#{converted_data[25]}|#{converted_data[31]}|#{converted_data[37]}||
-      ||#{converted_data[0]}|#{converted_data[6]}|#{converted_data[12]}|#{converted_data[18]}|#{converted_data[24]}|#{converted_data[30]}|#{converted_data[36]}||
-      ||0|1|2|3|4|5|6||
+      ||#{data[5]}|#{data[11]}|#{data[17]}|#{data[23]}|#{data[29]}|#{data[35]}|#{data[41]}||
+      ||#{data[4]}|#{data[10]}|#{data[16]}|#{data[22]}|#{data[28]}|#{data[34]}|#{data[40]}||
+      ||#{data[3]}|#{data[9]}|#{data[15]}|#{data[21]}|#{data[27]}|#{data[33]}|#{data[39]}||
+      ||#{data[2]}|#{data[8]}|#{data[14]}|#{data[20]}|#{data[26]}|#{data[32]}|#{data[38]}||
+      ||#{data[1]}|#{data[7]}|#{data[13]}|#{data[19]}|#{data[25]}|#{data[31]}|#{data[37]}||
+      ||#{data[0]}|#{data[6]}|#{data[12]}|#{data[18]}|#{data[24]}|#{data[30]}|#{data[36]}||
+      ||#{labels[0]}|#{labels[1]}|#{labels[2]}|#{labels[3]}|#{labels[4]}|#{labels[5]}|#{labels[6]}||
     TEMPLATE
   end
 end

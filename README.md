@@ -20,6 +20,8 @@ Furthermore, the last segment of this method has input.to_i sent to board.valid_
 
 Trying to refactor #valid_input? has been a journey of grief. I have realized that many of my tests expect the upper and lower limits of input to be specific values. In other words, the tests know how Game works.
 
+The more I look at my tests, the more coupling between tests and code I see. I also am finding that many of these seem to be related to methods using instance variables when they could be using parameters (with these instance variables set as defaults).
+
 2022-09-11
 I dislike how #winner is determined in Game currently.
 The method currently returns the #current_player if #winner? returns true. #winner? returns true if Board returns true to #any_wins? which is checking the #last_move received on the Board. This #last_move is set as the default of #any_wins.
