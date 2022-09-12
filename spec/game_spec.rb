@@ -208,7 +208,7 @@ describe Game do
     context 'when player_turn receives invalid input and then valid input' do
       subject(:game_round) { described_class.new }
       let(:invalid_input) { 'woooow' }
-      let(:valid_input) { '0' }
+      let(:valid_input) { '1' }
 
       before do
         allow(game_round).to receive(:player_input)
@@ -224,33 +224,27 @@ describe Game do
   end
 
   describe '#verify_input' do
-    context 'when player input is valid column 3' do
+    context 'when receiving true from valid_input?' do
+      let(:player_input) { '3' }
+      before do
+        allow(game).to receive(:valid_input?).with(player_input)
+                                             .and_return(true)
+      end
+
       it 'returns player input' do
-        player_input = '3'
         verified_input = game.verify_input(player_input)
         expect(verified_input).to eq(player_input)
       end
     end
 
-    context 'when player input is valid column 0' do
-      it 'returns player input' do
-        player_input = '0'
-        verified_input = game.verify_input(player_input)
-        expect(verified_input).to eq(player_input)
+    context 'when receiving false from valid_input? ' do
+      let(:invalid_input) { '55' }
+      before do
+        allow(game).to receive(:valid_input?).with(invalid_input)
+                                             .and_return(false)
       end
-    end
 
-    context 'when player input is invalid 55' do
       it 'returns nil' do
-        invalid_input = '55'
-        verified_input = game.verify_input(invalid_input)
-        expect(verified_input).to be(nil)
-      end
-    end
-
-    context 'when player input is invalid string' do
-      it 'returns nil' do
-        invalid_input = 'wizard'
         verified_input = game.verify_input(invalid_input)
         expect(verified_input).to be(nil)
       end
@@ -258,6 +252,12 @@ describe Game do
   end
 
   describe '#player_turn' do
+    let(:current_player) { instance_double(Player, name: 'dummy', disc: 'z') }
+
+    before :each do
+      game.instance_variable_set(:@current_player, current_player)
+    end
+
     context 'when player input is valid on first loop' do
       before do
         allow(game).to receive(:verify_input)
@@ -312,17 +312,21 @@ describe Game do
   end
 
   describe '#valid_input?' do
-    context "when input is '0'" do
+    context 'when input is within lower limit' do
       it 'returns true' do
-        valid_input = '0'
-        expect(game.valid_input?(valid_input)).to be(true)
+        lower_input_limit = '1'
+        valid_input = '1'
+        expect(game.valid_input?(valid_input, lower_limit: lower_input_limit))
+          .to be(true)
       end
     end
 
-    context "when input is '6'" do
+    context 'when input is within upper limit' do
       it 'returns true' do
-        valid_input = '6'
-        expect(game.valid_input?(valid_input)).to be(true)
+        upper_input_limit = '7'
+        valid_input = '7'
+        expect(game.valid_input?(valid_input, upper_limit: upper_input_limit))
+          .to be(true)
       end
     end
 

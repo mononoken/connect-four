@@ -65,10 +65,18 @@ class Game
     return input if valid_input?(input)
   end
 
-  def valid_input?(input)
-    (COL_LOWER_INDEX.to_s..COL_UPPER_INDEX.to_s).include?(input) &&
-      board.valid_drop?(input.to_i)
+  # This method is doing two things and is causing grief.
+  # It checks for valid_input AND valid_drop which are not the same thing.
+  def valid_input?(input, lower_limit: LOWER_INPUT, upper_limit: UPPER_INPUT)
+    (lower_limit..upper_limit).include?(input) 
+      # && board.valid_drop?(input.to_i)
+      # board.valid_drop?(input.to_column_index)
   end
+
+  # def valid_input?(input, lower_limit: nil, upper_limit: nil)
+  #   (COL_LOWER_INDEX.to_s..COL_UPPER_INDEX.to_s).include?(input) &&
+  #     board.valid_drop?(input.to_i)
+  # end
 
   def switch_current_player
     self.current_player =

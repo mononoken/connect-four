@@ -6,6 +6,20 @@ I just recently read '99 Bottles of OOP' by Sandi Metz, so I am also hoping to a
 
 Features to add:
 
+2022-09-12
+Today, I am going to implement the column names being named 1~7 instead of 0~6. 0~6 does not make as much sense to someone who is not a programmer. Also, assuming the player is not playing with a numpad, 0 is inconveniently placed on the far right of a keyboard instead of next to 1.
+
+Is the code open to receiving input 1~7? No.
+
+How can I make it open? Look for code smells.
+
+I don't know if this is a listed 'code smell', but I see that #valid_input? references COL_LOWER_INDEX.to_s. This seems to be a smell to me. This method does not want the lower index because it is checking inputs, not indeces. This is clear from the fact that the index is being converted to a string with to_s.
+
+Furthermore, the last segment of this method has input.to_i sent to board.valid_drop?. This is another 'smell'. We are converting input.to_i because we know valid_drop? wants a column index, not a string input. However, using this primitive method, #to_i, obscures this a bit. It feels to me that we desire a method like #to_column_index.
+
+
+Trying to refactor #valid_input? has been a journey of grief. I have realized that many of my tests expect the upper and lower limits of input to be specific values. In other words, the tests know how Game works.
+
 2022-09-11
 I dislike how #winner is determined in Game currently.
 The method currently returns the #current_player if #winner? returns true. #winner? returns true if Board returns true to #any_wins? which is checking the #last_move received on the Board. This #last_move is set as the default of #any_wins.
