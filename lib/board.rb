@@ -64,6 +64,10 @@ class Board
     columns.map(&:spaces).flatten
   end
 
+  def display
+    BoardVisualizer.new(board: self).display
+  end
+
   private
 
   def line(coordinates)

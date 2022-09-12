@@ -19,13 +19,13 @@ class Game
     @players = [player1, player2]
   end
 
-  # incomplete
   def play
     setup
     run_rounds
-    finish
+    announce_results
   end
 
+  # Wanting to see current player announced.
   def run_rounds
     until game_over?
       switch_current_player
@@ -35,6 +35,12 @@ class Game
   end
 
   def game_over?
+    winner? || draw?
+  end
+
+  # This seems a bit disconnected in deciding WHO the winner is.
+  # See #winner as well.
+  def winner?
     board.any_wins?
   end
 
@@ -77,13 +83,8 @@ class Game
       end
   end
 
-  # Unnecessary?
-  def choose_current_player(player)
-    self.current_player = player
-  end
-
   def winner
-    current_player if game_over?
+    current_player if winner?
   end
 
   def random_player
@@ -96,10 +97,6 @@ class Game
 
   def player2
     players[1]
-  end
-
-  def display
-    BoardVisualizer.new(board: self).display
   end
 
   private
@@ -122,6 +119,18 @@ class Game
     puts board.display
   end
 
+  def announce_results
+    if winner?
+      announce_winner
+    elsif draw?
+      puts 'Stalemate.'
+    end
+  end
+
+  def announce_winner(winner = self.winner)
+    puts "#{winner.name} wins!"
+  end
+
   def instructions
     <<~INSTRUCTIONS
       Welcome to Connect Four!
@@ -130,9 +139,5 @@ class Game
       You can make a row horizontally, vertically, and diagonally.
       When one player has four discs in a row they win!
     INSTRUCTIONS
-  end
-
-  def finish
-    'Winner wins!'
   end
 end

@@ -37,7 +37,7 @@ describe Game do
     end
   end
 
-  describe '#game_over?' do
+  describe '#winner?' do
     context 'when board receives any_wins? and returns false' do
       subject(:continue_game) { described_class.new(board: continue_board) }
       let(:continue_board) { instance_double(Board) }
@@ -47,7 +47,7 @@ describe Game do
       end
 
       it 'returns true' do
-        expect(continue_game.game_over?).to be(false)
+        expect(continue_game.winner?).to be(false)
       end
     end
 
@@ -59,7 +59,7 @@ describe Game do
       end
 
       it 'returns true' do
-        expect(win_game.game_over?).to be(true)
+        expect(win_game.winner?).to be(true)
       end
     end
   end
@@ -151,13 +151,12 @@ describe Game do
     end
   end
 
-  # Incomplete
   describe '#winner' do
-    context 'when game_over? is false' do
+    context 'when winner? is false' do
       subject(:new_game) { described_class.new }
 
       before do
-        allow(new_game).to receive(:game_over?).and_return(false)
+        allow(new_game).to receive(:winner?).and_return(false)
       end
 
       it 'returns nil' do
@@ -165,12 +164,15 @@ describe Game do
       end
     end
 
-    context 'when game_over? is true' do
-      subject(:won_game) { described_class.new }
+    context 'when winner? is true' do
+      subject(:won_game) do
+        described_class.new(player1: player1, player2: player2)
+      end
       let(:player1) { instance_double(Player, name: 'player1', disc: 'o') }
+      let(:player2) { instance_double(Player, name: 'player2', disc: 'x') }
 
       before do
-        allow(won_game).to receive(:game_over?).and_return(true)
+        allow(won_game).to receive(:winner?).and_return(true)
         won_game.instance_variable_set(:@current_player, player1)
       end
 
@@ -369,24 +371,6 @@ describe Game do
     end
   end
 
-  describe '#choose_current_player' do
-    context 'when current_player selected is player1' do
-      it 'sets current_player to player1' do
-        selected_player = game.player1
-        expect { game.choose_current_player(selected_player) }
-          .to change { game.current_player }.to(selected_player)
-      end
-    end
-
-    context 'when current_player selected is player2' do
-      it 'sets current_player to player2' do
-        selected_player = game.player2
-        expect { game.choose_current_player(selected_player) }
-          .to change { game.current_player }.to(selected_player)
-      end
-    end
-  end
-
   describe '#random_player' do
     context 'when called once with seed 1234' do
       before do
@@ -414,48 +398,6 @@ describe Game do
       end
     end
   end
-
-  # describe '#run_round' do
-  #   subject(:game) { described_class.new(board) }
-  #   let(:board) { instance_double(Board) }
-  #   context 'when drop is valid and drop returns [0, 3]' do
-  #     let(:drop_coordinates) { [0, 3] }
-
-  #     before do
-  #       allow(game).to receive(:valid_input?).and_return(true)
-  #       allow(board).to receive(:drop).and_return(drop_coordinates)
-  #     end
-
-  #     it 'pushes drop coordinates into drops' do
-  #       expect { game.run_round }.to change { game.drops.last }
-  #         .to(drop_coordinates)
-  #     end
-  #   end
-
-  #   context 'when drop is valid and drop returns [3, 4]' do
-  #     let(:drop_coordinates) { [3, 4] }
-
-  #     before do
-  #       allow(game).to receive(:valid_input?).and_return(true)
-  #       allow(board).to receive(:drop).and_return(drop_coordinates)
-  #     end
-
-  #     it 'pushes drop coordinates into drops' do
-  #       expect { game.run_round }.to change { game.drops.last }
-  #         .to(drop_coordinates)
-  #     end
-  #   end
-
-  #   context 'when drop is invalid once' do
-  #     before do
-  #       allow(game).to receive(:valid_input?).and_return(false)
-  #     end
-
-  #     it 'does not change drops' do
-  #       expect { game.run_round }.not_to change { game.drops.last }
-  #     end
-  #   end
-  # end
 end
 
 # rubocop:enable Metrics/BlockLength
