@@ -74,10 +74,10 @@ class Game
   def switch_current_player
     self.current_player =
       case current_player
-      when player1
-        player2
-      when player2
-        player1
+      when players[0]
+        players[1]
+      when players[1]
+        players[0]
       when nil
         random_player
       end
@@ -89,14 +89,6 @@ class Game
 
   def random_player
     players[rand(players.count)]
-  end
-
-  def player1
-    players[0]
-  end
-
-  def player2
-    players[1]
   end
 
   private

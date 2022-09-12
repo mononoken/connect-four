@@ -213,6 +213,7 @@ describe Game do
       before do
         allow(game_round).to receive(:player_input)
           .and_return(invalid_input, valid_input)
+        allow(game_round).to receive(:puts)
         game_round.player_turn
       end
 
@@ -350,23 +351,23 @@ describe Game do
   describe '#switch_current_player' do
     context 'when current_player is player1' do
       before do
-        game.current_player = game.player1
+        game.current_player = game.players[0]
       end
 
       it 'sets current_player to player2' do
         expect { game.switch_current_player }.to change { game.current_player }
-          .from(game.player1).to(game.player2)
+          .from(game.players[0]).to(game.players[1])
       end
     end
 
     context 'when current_player is player2' do
       before do
-        game.current_player = game.player2
+        game.current_player = game.players[1]
       end
 
       it 'sets current_player to player1' do
         expect { game.switch_current_player }.to change { game.current_player }
-          .from(game.player2).to(game.player1)
+          .from(game.players[1]).to(game.players[0])
       end
     end
   end
@@ -378,7 +379,7 @@ describe Game do
       end
 
       it 'returns player2' do
-        expected_player = game.player2
+        expected_player = game.players[1]
         random_player = game.random_player
         expect(random_player).to be(expected_player)
       end
@@ -390,7 +391,7 @@ describe Game do
       end
 
       it 'returns player1' do
-        expected_player = game.player1
+        expected_player = game.players[0]
         game.random_player
         game.random_player
         random_player = game.random_player
