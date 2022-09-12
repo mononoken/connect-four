@@ -80,7 +80,7 @@ describe Game do
       end
 
       it 'sends #drop to board with valid choice and current_player.disc' do
-        valid_choice = valid_input.to_i
+        valid_choice = game.to_index(valid_input)
         current_player_disc = game.current_player.disc
 
         expect(game.board).to receive(:drop)
@@ -97,7 +97,7 @@ describe Game do
       end
 
       it 'sends #drop to board with valid choice and current_player.disc' do
-        valid_choice = valid_input.to_i
+        valid_choice = game.to_index(valid_input)
         current_player_disc = game.current_player.disc
 
         expect(game.board).to receive(:drop)
@@ -251,6 +251,47 @@ describe Game do
     end
   end
 
+  describe '#valid_input?' do
+    context 'when input is within lower limit' do
+      it 'returns true' do
+        lower_input_limit = '1'
+        valid_input = '1'
+        expect(game.valid_input?(valid_input, lower_limit: lower_input_limit))
+          .to be(true)
+      end
+    end
+
+    context 'when input is within upper limit' do
+      it 'returns true' do
+        upper_input_limit = '7'
+        valid_input = '7'
+        expect(game.valid_input?(valid_input, upper_limit: upper_input_limit))
+          .to be(true)
+      end
+    end
+
+    context 'when input is invalid string' do
+      it 'returns false' do
+        invalid_input = 'bernard'
+        expect(game.valid_input?(invalid_input)).to be(false)
+      end
+    end
+
+    context 'when input is blank' do
+      it 'returns false' do
+        invalid_input = ''
+        expect(game.valid_input?(invalid_input)).to be(false)
+      end
+    end
+
+    context 'when input is 0 but an Integer' do
+      it 'returns false' do
+        invalid_input = 0
+        expect(game.valid_input?(invalid_input)).to be(false)
+      end
+    end
+  end
+
   describe '#player_turn' do
     let(:current_player) { instance_double(Player, name: 'dummy', disc: 'z') }
 
@@ -307,47 +348,6 @@ describe Game do
       it 'sends invalid_input msg 4 times' do
         expect(game).to receive(:invalid_input).exactly(4).times
         game.player_turn
-      end
-    end
-  end
-
-  describe '#valid_input?' do
-    context 'when input is within lower limit' do
-      it 'returns true' do
-        lower_input_limit = '1'
-        valid_input = '1'
-        expect(game.valid_input?(valid_input, lower_limit: lower_input_limit))
-          .to be(true)
-      end
-    end
-
-    context 'when input is within upper limit' do
-      it 'returns true' do
-        upper_input_limit = '7'
-        valid_input = '7'
-        expect(game.valid_input?(valid_input, upper_limit: upper_input_limit))
-          .to be(true)
-      end
-    end
-
-    context 'when input is invalid string' do
-      it 'returns false' do
-        invalid_input = 'bernard'
-        expect(game.valid_input?(invalid_input)).to be(false)
-      end
-    end
-
-    context 'when input is blank' do
-      it 'returns false' do
-        invalid_input = ''
-        expect(game.valid_input?(invalid_input)).to be(false)
-      end
-    end
-
-    context 'when input is 0 but an Integer' do
-      it 'returns false' do
-        invalid_input = 0
-        expect(game.valid_input?(invalid_input)).to be(false)
       end
     end
   end

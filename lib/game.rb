@@ -49,7 +49,7 @@ class Game
 
   def run_round
     player_turn
-    board.drop(current_player_choice.to_i, current_player.disc)
+    board.drop(to_index(current_player_choice), current_player.disc)
   end
 
   def player_turn
@@ -62,7 +62,7 @@ class Game
   end
 
   def verify_input(input)
-    return input if valid_input?(input) && board.valid_drop?(input.to_i)
+    return input if valid_input?(input) && board.valid_drop?(to_index(input))
   end
 
   def valid_input?(input, lower_limit: LOWER_INPUT, upper_limit: UPPER_INPUT)
@@ -87,6 +87,10 @@ class Game
 
   def random_player
     players[rand(players.count)]
+  end
+
+  def to_index(input)
+    input.to_i - 1
   end
 
   private
