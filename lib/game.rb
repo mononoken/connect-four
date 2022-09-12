@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative 'board'
-require_relative 'board_visualizer'
 require_relative 'board_constants'
 require_relative 'player'
 

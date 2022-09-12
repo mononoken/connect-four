@@ -2,6 +2,7 @@
 
 require_relative 'board_constants'
 require_relative 'board_coordinator'
+require_relative 'board_visualizer'
 require_relative 'column'
 
 # Represents a 6x7 Connect Four board.
