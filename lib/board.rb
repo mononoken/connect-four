@@ -37,6 +37,8 @@ class Board
     four_in_a_row?(disc, line(disc).vertical)
   end
 
+  # This feels a little cheaty. It's checking for "any" wins by just checking
+  # the last move and assuming no wins existed before it.
   def any_wins?(disc = last_disc)
     return false if disc.nil?
 

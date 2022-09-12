@@ -4,6 +4,16 @@ In this project, we are testing our ability to code via test-driven development 
 
 I just recently read '99 Bottles of OOP' by Sandi Metz, so I am also hoping to apply the principles from that book in this project as well. These include working horizontally, reaching Shameless green, refactoring under green, SOLID principles, and many more concepts.
 
+Features to add:
+
+2022-09-11
+I dislike how #winner is determined in Game currently.
+The method currently returns the #current_player if #winner? returns true. #winner? returns true if Board returns true to #any_wins? which is checking the #last_move received on the Board. This #last_move is set as the default of #any_wins.
+
+#last_move and #current_player are not actually linked in any way other than WHERE they are called in the game. I think that is what is bugging me. Whether this is an actual problem or not is hard for me to say right now.
+
+I had the notion that maybe I wanted a Players class to organize all Player type methods in Game. I am not sure the game really requires it at the moment, but it sounds like a neat idea.
+
 2022-09-11
 An example of why I love TDD:
 1. I want to build the method #draw? for my Game class.

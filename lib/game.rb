@@ -93,13 +93,13 @@ class Game
 
   private
 
-  def player_input
-    puts 'Choose a column between 0 and 6 to drop your disc.'
+  def player_input(player_name = current_player.name)
+    puts "#{player_name}, choose a column between 0 and 6 to drop your disc."
     gets.chomp
   end
 
   def invalid_input
-    puts 'Invalid input! Choose a column between 0 and 6 to drop your disc.'
+    puts 'Invalid input!'
   end
 
   def setup
