@@ -134,3 +134,57 @@ class Game
     INSTRUCTIONS
   end
 end
+
+class Players
+  attr_reader :all
+
+  def initialize(player1: Player.new(name: 'player1', disc: 'o'),
+                 player2: Player.new(name: 'player2', disc: 'x'))
+    @all = [player1, player2]
+  end
+
+  def order
+    @order ||= random_order
+  end
+
+  def random_order
+    [random_player, other_player].cycle
+  end
+
+  def random_player
+    players[rand(players.count)]
+  end
+
+  def other_player(the_player)
+    all.find { |player| player != the_player }
+  end
+
+  def current
+    order.peek
+  end
+
+  def swap_current
+    order.next
+  end
+
+  ###
+
+  def winner
+    current_player if winner?
+  end
+
+  def player_turn
+    loop do
+      self.current_player_choice = verify_input(player_input)
+      break if current_player_choice
+
+      invalid_input
+    end
+  end
+
+  # Move to Player?
+  def player_input(player_name = current_player.name)
+    puts "#{player_name}, choose a column between #{LOWER_INPUT} and #{UPPER_INPUT} to drop your disc."
+    gets.chomp
+  end
+end
