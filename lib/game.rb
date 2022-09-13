@@ -8,14 +8,23 @@ require_relative 'player'
 class Game
   include BoardConstants
 
-  attr_reader :board, :players
-  attr_accessor :current_player, :current_player_choice
+  attr_reader :board, :players, :new_players
+  attr_accessor :current_player_choice
 
   def initialize(board: Board.new,
                  player1: Player.new(name: 'player1', disc: 'o'),
                  player2: Player.new(name: 'player2', disc: 'x'))
     @board = board
     @players = [player1, player2]
+    @new_players = Players.new(player1: player1, player2: player2)
+  end
+
+  def current_player
+    new_players.current
+  end
+
+  def current_player=(player)
+    new_players.order(enumerator: [player, new_players.other_player(player)].cycle)
   end
 
   def play
@@ -69,15 +78,7 @@ class Game
   end
 
   def switch_current_player
-    self.current_player =
-      case current_player
-      when players[0]
-        players[1]
-      when players[1]
-        players[0]
-      when nil
-        random_player
-      end
+    new_players.swap_current
   end
 
   def winner
@@ -143,16 +144,16 @@ class Players
     @all = [player1, player2]
   end
 
-  def order
-    @order ||= random_order
+  def order(enumerator: random_order)
+    @order ||= enumerator
   end
 
   def random_order
-    [random_player, other_player].cycle
+    [random_player, other_player(random_player)].cycle
   end
 
   def random_player
-    players[rand(players.count)]
+    all[rand(all.count)]
   end
 
   def other_player(the_player)
@@ -165,6 +166,14 @@ class Players
 
   def swap_current
     order.next
+  end
+
+  def one
+    all[0]
+  end
+
+  def two
+    all[1]
   end
 
   ###
