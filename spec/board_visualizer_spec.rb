@@ -27,7 +27,7 @@ describe BoardVisualizer do
         expect(empty_visualizer.display).to eq(empty_display)
       end
     end
-g
+
     context 'when each board column has one x filled in' do
       subject(:bottom_x_visualizer) do
         described_class.new(board: bottom_x_board)

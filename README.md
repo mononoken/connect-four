@@ -4,7 +4,21 @@ In this project, we are testing our ability to code via test-driven development 
 
 I just recently read '99 Bottles of OOP' by Sandi Metz, so I am also hoping to apply the principles from that book in this project as well. These include working horizontally, reaching Shameless green, refactoring under green, SOLID principles, and many more concepts.
 
-Features to add:
+TO DO:
+- Replay function
+- Player set own name
+- Player set own disc
+- Better BoardVisualizer
+- Visualize where the winning combo is located
+
+2022-09-13
+Ran game and realized I need to update column numbers for some puts commands. Easy fix! Code was open to the change.
+
+Next step: Add a replay function.
+
+Is it open? Not sure. I could set Game@board to a new Board. Currently, Board is fed into Game#initialize. I would want to run something like #play again. #setup currently calls #instructions, which I would not want to show again.
+
+Code smells. First, most noticable thanks to Rubocop, is Game class is too long.
 
 2022-09-12
 Today, I am going to implement the column names being named 1~7 instead of 0~6. 0~6 does not make as much sense to someone who is not a programmer. Also, assuming the player is not playing with a numpad, 0 is inconveniently placed on the far right of a keyboard instead of next to 1.

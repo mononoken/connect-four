@@ -24,7 +24,6 @@ class Game
     announce_results
   end
 
-  # Wanting to see current player announced.
   def run_rounds
     until game_over?
       switch_current_player
@@ -96,7 +95,7 @@ class Game
   private
 
   def player_input(player_name = current_player.name)
-    puts "#{player_name}, choose a column between 0 and 6 to drop your disc."
+    puts "#{player_name}, choose a column between #{LOWER_INPUT} and #{UPPER_INPUT} to drop your disc."
     gets.chomp
   end
 
@@ -128,7 +127,7 @@ class Game
   def instructions
     <<~INSTRUCTIONS
       Welcome to Connect Four!
-      Pick a column number (0, 1, 2... 6) to drop your disc in the column.
+      Pick a column number to drop your disc in the column.
       Players will take turns dropping their discs on the board.
       You can make a row horizontally, vertically, and diagonally.
       When one player has four discs in a row they win!
