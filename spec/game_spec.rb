@@ -375,34 +375,6 @@ describe Game do
       end
     end
   end
-
-  describe '#random_player' do
-    context 'when called once with seed 1234' do
-      before do
-        srand(1234)
-      end
-
-      it 'returns player2' do
-        expected_player = game.players[1]
-        random_player = game.random_player
-        expect(random_player).to be(expected_player)
-      end
-    end
-
-    context 'when called three times with seed 1234' do
-      before do
-        srand(1234)
-      end
-
-      it 'returns player1' do
-        expected_player = game.players[0]
-        game.random_player
-        game.random_player
-        random_player = game.random_player
-        expect(random_player).to be(expected_player)
-      end
-    end
-  end
 end
 
 # rubocop:enable Metrics/BlockLength

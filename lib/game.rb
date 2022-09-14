@@ -3,6 +3,7 @@
 require_relative 'board'
 require_relative 'board_constants'
 require_relative 'player'
+require_relative 'players'
 
 # Represents the game, Connect Four.
 class Game
@@ -86,7 +87,7 @@ class Game
   end
 
   def random_player
-    players[rand(players.count)]
+    new_players.random_player
   end
 
   def to_index(input)
@@ -133,67 +134,5 @@ class Game
       You can make a row horizontally, vertically, and diagonally.
       When one player has four discs in a row they win!
     INSTRUCTIONS
-  end
-end
-
-class Players
-  attr_reader :all
-
-  def initialize(player1: Player.new(name: 'player1', disc: 'o'),
-                 player2: Player.new(name: 'player2', disc: 'x'))
-    @all = [player1, player2]
-  end
-
-  def order(enumerator: random_order)
-    @order ||= enumerator
-  end
-
-  def random_order
-    [random_player, other_player(random_player)].cycle
-  end
-
-  def random_player
-    all[rand(all.count)]
-  end
-
-  def other_player(the_player)
-    all.find { |player| player != the_player }
-  end
-
-  def current
-    order.peek
-  end
-
-  def swap_current
-    order.next
-  end
-
-  def one
-    all[0]
-  end
-
-  def two
-    all[1]
-  end
-
-  ###
-
-  def winner
-    current_player if winner?
-  end
-
-  def player_turn
-    loop do
-      self.current_player_choice = verify_input(player_input)
-      break if current_player_choice
-
-      invalid_input
-    end
-  end
-
-  # Move to Player?
-  def player_input(player_name = current_player.name)
-    puts "#{player_name}, choose a column between #{LOWER_INPUT} and #{UPPER_INPUT} to drop your disc."
-    gets.chomp
   end
 end
