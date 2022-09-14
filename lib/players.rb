@@ -6,7 +6,7 @@ require_relative 'player'
 class Players
   attr_reader :player1, :player2, :all
   attr_writer :order
-g
+
   def initialize(player1: Player.new(name: 'player1', disc: 'o'),
                  player2: Player.new(name: 'player2', disc: 'x'))
     @player1 = player1

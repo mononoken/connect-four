@@ -9,23 +9,15 @@ require_relative 'players'
 class Game
   include BoardConstants
 
-  attr_reader :board, :players, :new_players
+  attr_reader :board, :players
   attr_accessor :current_player_choice
 
   def initialize(board: Board.new,
                  player1: Player.new(name: 'player1', disc: 'o'),
-                 player2: Player.new(name: 'player2', disc: 'x'))
+                 player2: Player.new(name: 'player2', disc: 'x'),
+                 players: Players.new(player1: player1, player2: player2))
     @board = board
-    @players = [player1, player2]
-    @new_players = Players.new(player1: player1, player2: player2)
-  end
-
-  def current_player
-    new_players.current
-  end
-
-  def current_player=(player)
-    new_players.order(enumerator: [player, new_players.other_player(player)].cycle)
+    @players = players
   end
 
   def play
@@ -36,7 +28,7 @@ class Game
 
   def run_rounds
     until game_over?
-      switch_current_player
+      players.swap_current
       run_round
       show_board
     end
@@ -56,6 +48,8 @@ class Game
     board.full? && winner.nil?
   end
 
+  # I think run_round should be the contents of run_rounds
+  # This should be renamed and containe within it
   def run_round
     player_turn
     board.drop(to_index(current_player_choice), current_player.disc)
@@ -78,20 +72,20 @@ class Game
     (lower_limit..upper_limit).include?(input)
   end
 
-  def switch_current_player
-    new_players.swap_current
-  end
-
   def winner
     current_player if winner?
   end
 
   def random_player
-    new_players.random_player
+    players.random_player
   end
 
   def to_index(input)
     input.to_i - 1
+  end
+
+  def current_player
+    players.current
   end
 
   private
