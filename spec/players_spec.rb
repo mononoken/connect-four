@@ -5,39 +5,93 @@ require_relative '../lib/players'
 # rubocop:disable Metrics/BlockLength
 
 describe Players do
-  subject(:players) { described_class.new }
+  subject(:two_players) do
+    described_class.new(player1: player_one, player2: player_two)
+  end
+  let(:player_one) { instance_double(Player, name: 'one', disc: '1') }
+  let(:player_two) { instance_double(Player, name: 'two', disc: '2') }
 
-  describe '#switch_current_player' do
-    context 'when current_player is player1' do
+  describe '#swap_current' do
+    context 'when #current message is player_one' do
       before do
-        game.current_player = game.players[0]
+        two_players.current = player_one
       end
 
-      xit 'sets current_player to player2' do
-        expect { game.switch_current_player }.to change { game.current_player }
-          .from(game.players[0]).to(game.players[1])
+      it 'changes #current message to player_two' do
+        expect { two_players.swap_current }.to change { two_players.current }
+          .from(player_one).to(player_two)
       end
     end
 
-    context 'when current_player is player2' do
+    context 'when #current message is player_two' do
       before do
-        game.current_player = game.players[1]
+        two_players.current = player_two
       end
 
-      xit 'sets current_player to player1' do
-        expect { game.switch_current_player }.to change { game.current_player }
-          .from(game.players[1]).to(game.players[0])
+      it 'changes #current message to player_one' do
+        expect { two_players.swap_current }.to change { two_players.current }
+          .from(player_two).to(player_one)
+      end
+    end
+  end
+
+  describe '#current=' do
+    context 'when passed player_one' do
+      it 'sets @order to an enumerator starting with player_one' do
+        two_players.current = player_one
+        expect(two_players.order.peek).to eq(player_one)
+      end
+    end
+
+    context 'when passed player_two' do
+      it 'sets @order to an enumerator starting with player_two' do
+        two_players.current = player_two
+        expect(two_players.order.peek).to eq(player_two)
+      end
+    end
+  end
+
+  describe '#order' do
+    context 'when @order is nil and given an enumerator' do
+      let(:given_enumerator) { [].to_enum }
+      before do
+        two_players.instance_variable_set(:@order, nil)
+      end
+
+      it 'sets @order to the value of given enumerator' do
+        two_players.order(enumerator: given_enumerator)
+        expect(two_players.order).to eq(given_enumerator)
+      end
+    end
+
+    context 'when @order is not nil' do
+      let(:an_enumerator) { [].to_enum }
+      before do
+        two_players.instance_variable_set(:@order, an_enumerator)
+      end
+
+      it 'returns @order' do
+        order_instance_variable = two_players.instance_variable_get(:@order)
+        expect(two_players.order).to eq(order_instance_variable)
+      end
+    end
+  end
+
+  describe '#other_player' do
+    context 'when passed player_one' do
+      it 'returns player_two' do
+        expect(two_players.other_player(player_one)).to be(player_two)
+      end
+    end
+
+    context 'when passed player_two' do
+      it 'returns player_one' do
+        expect(two_players.other_player(player_two)).to be(player_one)
       end
     end
   end
 
   describe '#random_player' do
-    subject(:two_players) do
-      described_class.new(player1: player_one, player2: player_two)
-    end
-    let(:player_one) { instance_double(Player, name: 'one', disc: '1') }
-    let(:player_two) { instance_double(Player, name: 'two', disc: '2') }
-
     context 'when called once with seed 1234' do
       before do
         srand(1234)
