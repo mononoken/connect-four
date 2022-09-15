@@ -14,6 +14,10 @@ class Players
     @all = [player1, player2]
   end
 
+  def run_round
+    swap_current
+  end
+
   def swap_current
     order.next
   end

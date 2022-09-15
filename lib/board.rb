@@ -18,6 +18,11 @@ class Board
     end
   end
 
+  def run_round(column_num, disc)
+    drop(column_num, disc)
+    puts display
+  end
+
   def diagonal_win?(disc)
     left_diagonal_win?(disc) || right_diagonal_win?(disc)
   end

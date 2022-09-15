@@ -64,48 +64,48 @@ describe Game do
     end
   end
 
-  describe '#run_round' do
-    subject(:game) do
-      described_class.new(player1: player_x,
-                          player2: player_o)
-    end
-    let(:player_x) { instance_double(Player, name: 'player_x', disc: 'x') }
-    let(:player_o) { instance_double(Player, name: 'player_o', disc: 'o') }
+  # describe '#run_round' do
+  #   subject(:game) do
+  #     described_class.new(player1: player_x,
+  #                         player2: player_o)
+  #   end
+  #   let(:player_x) { instance_double(Player, name: 'player_x', disc: 'x') }
+  #   let(:player_o) { instance_double(Player, name: 'player_o', disc: 'o') }
 
-    context 'when player_turn receives valid input' do
-      let(:valid_input) { '2' }
-      before :each do
-        game.instance_variable_set(:@current_player, player_x)
-        allow(game).to receive(:player_input).and_return(valid_input)
-      end
+  #   context 'when player_turn receives valid input' do
+  #     let(:valid_input) { '2' }
+  #     before :each do
+  #       game.instance_variable_set(:@current_player, player_x)
+  #       allow(game).to receive(:player_input).and_return(valid_input)
+  #     end
 
-      it 'sends #drop to board with valid choice and current_player.disc' do
-        valid_choice = game.to_index(valid_input)
-        current_player_disc = game.current_player.disc
+  #     it 'sends #drop to board with valid choice and current_player.disc' do
+  #       valid_choice = game.to_index(valid_input)
+  #       current_player_disc = game.current_player.disc
 
-        expect(game.board).to receive(:drop)
-          .with(valid_choice, current_player_disc).once
-        game.run_round
-      end
-    end
+  #       expect(game.board).to receive(:drop)
+  #         .with(valid_choice, current_player_disc).once
+  #       game.run_round
+  #     end
+  #   end
 
-    context 'when player_turn receives valid input' do
-      let(:valid_input) { '4' }
-      before :each do
-        game.instance_variable_set(:@current_player, player_o)
-        allow(game).to receive(:player_input).and_return(valid_input)
-      end
+  #   context 'when player_turn receives valid input' do
+  #     let(:valid_input) { '4' }
+  #     before :each do
+  #       game.instance_variable_set(:@current_player, player_o)
+  #       allow(game).to receive(:player_input).and_return(valid_input)
+  #     end
 
-      it 'sends #drop to board with valid choice and current_player.disc' do
-        valid_choice = game.to_index(valid_input)
-        current_player_disc = game.current_player.disc
+  #     it 'sends #drop to board with valid choice and current_player.disc' do
+  #       valid_choice = game.to_index(valid_input)
+  #       current_player_disc = game.current_player.disc
 
-        expect(game.board).to receive(:drop)
-          .with(valid_choice, current_player_disc).once
-        game.run_round
-      end
-    end
-  end
+  #       expect(game.board).to receive(:drop)
+  #         .with(valid_choice, current_player_disc).once
+  #       game.run_round
+  #     end
+  #   end
+  # end
 
   describe 'draw?' do
     context 'when board is not full' do
