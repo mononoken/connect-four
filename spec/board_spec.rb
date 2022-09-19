@@ -320,6 +320,55 @@ describe Board do
     end
   end
 
+  # Need to test matching_marks
+  describe '#four_in_a_row?' do
+    subject(:win_board) { described_class.new }
+    context 'when direction array of disc contains four discs in a row' do
+
+      xit 'returns true' do
+        disc = 'x'
+        direction = nil
+        expect(win_board.four_in_a_row?(disc, direction)).to be(true)
+      end
+    end
+  end
+
+  describe '#matching_marks?' do
+    subject(:board) { described_class.new }
+
+    context 'when line array all have the same disc value' do
+      it 'returns true' do
+        marks = %w[x x x x x]
+        mark = 'x'
+        expect(board.matching_marks?(marks, mark)).to be(true)
+      end
+    end
+
+    context 'when line array do not all have same disc value' do
+      it 'returns false' do
+        marks = %w[x o x o]
+        mark = 'x'
+        expect(board.matching_marks?(marks, mark)).to be(false)
+      end
+    end
+
+    context 'when line array is all nil' do
+      it 'returns false' do
+        marks = [nil, nil, nil]
+        mark = nil
+        expect(board.matching_marks?(marks, mark)).to be(false)
+      end
+    end
+
+    context 'when line array are all the same but do not match selected mark' do
+      it 'returns false' do
+        marks = %w[o o o]
+        mark = 'x'
+        expect(board.matching_marks?(marks, mark)).to be(false)
+      end
+    end
+  end
+
   describe '#lines_of_four' do
     subject(:board) { described_class.new }
     context 'when given an array of unique values' do

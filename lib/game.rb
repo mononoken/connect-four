@@ -18,10 +18,10 @@ class Game
                  players: Players.new(player1: player1, player2: player2))
     @board = board
     @players = players
-    setup
   end
 
   def play
+    setup
     run_rounds
     announce_results
   end

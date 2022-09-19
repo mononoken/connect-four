@@ -82,7 +82,23 @@ class Board
     BoardVisualizer.new(board: self).display
   end
 
+  def four_in_a_row?(disc, direction)
+    lines_of_four(direction).any? do |line_of_four|
+      matching_marks?(line_values(line_of_four), mark(disc))
+    end
+  end
+
+  def matching_marks?(marks, mark)
+    return false if mark.nil?
+
+    marks.all?(mark)
+  end
+
   private
+
+  def line_values(line)
+    line.map { |coordinate| mark(coordinate) }
+  end
 
   def line(coordinates)
     BoardCoordinator.new(coordinates)
@@ -90,18 +106,6 @@ class Board
 
   def mark(coordinates)
     column(coordinates[0]).space(coordinates[1])
-  end
-
-  def four_in_a_row?(disc, direction)
-    lines_of_four(direction).any? do |line_of_four|
-      matching_marks?(line_of_four, mark(disc))
-    end
-  end
-
-  def matching_marks?(line, mark)
-    return false if mark.nil?
-
-    line.all? { |coordinates| mark(coordinates) == mark }
   end
 
   def valid_column?(column_num)

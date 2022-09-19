@@ -211,7 +211,7 @@ describe Game do
   describe '#valid_input?' do
     context 'when input is within LOWER_INPUT' do
       it 'returns true' do
-        stub_const('Game::LOWER_INPUT', '0')
+        stub_const("#{described_class}::LOWER_INPUT", '0')
         valid_input = '0'
         expect(game.valid_input?(valid_input))
           .to be(true)
@@ -220,7 +220,7 @@ describe Game do
 #
     context 'when input is within UPPER_INPUT' do
       it 'returns true' do
-        stub_const('Game::UPPER_INPUT', '9000')
+        stub_const("#{described_class}::UPPER_INPUT", '9000')
         valid_input = '8000'
         expect(game.valid_input?(valid_input))
           .to be(true)
