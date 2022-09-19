@@ -43,6 +43,12 @@ class Board
     four_in_a_row?(disc, line(disc).vertical)
   end
 
+  def lines_of_four(line)
+    line.map.with_index do |_, index|
+      line[index..index + 3] if line[index..index + 3].count == 4
+    end.compact
+  end
+
   # This feels a little cheaty. It's checking for "any" wins by just checking
   # the last move and assuming no wins existed before it.
   def any_wins?(disc = last_disc)
@@ -96,12 +102,6 @@ class Board
     return false if mark.nil?
 
     line.all? { |coordinates| mark(coordinates) == mark }
-  end
-
-  def lines_of_four(line)
-    line.map.with_index do |_, index|
-      line[index..index + 3] if line[index..index + 3].count == 4
-    end.compact
   end
 
   def valid_column?(column_num)

@@ -320,6 +320,37 @@ describe Board do
     end
   end
 
+  describe '#lines_of_four' do
+    subject(:board) { described_class.new }
+    context 'when given an array of unique values' do
+      let(:unique_values) { %w[a b c d e f g] }
+      it 'returns an array of every instance of 4 items in the OG array' do
+        all_arrays_of_four = [
+          %w[a b c d],
+          %w[b c d e],
+          %w[c d e f],
+          %w[d e f g]
+        ]
+        expect(board.lines_of_four(unique_values))
+          .to eq(all_arrays_of_four)
+      end
+    end
+
+    context 'when given an array of line values' do
+      let(:line) { ['o', 'o', 'x', 'o', nil, nil, nil] }
+      it 'returns an array of every instance of 4 items in the OG array' do
+        all_lines_of_four = [
+          ['o', 'o', 'x', 'o'],
+          ['o', 'x', 'o', nil],
+          ['x', 'o', nil, nil],
+          ['o', nil, nil, nil]
+        ]
+        expect(board.lines_of_four(line))
+          .to eq(all_lines_of_four)
+      end
+    end
+  end
+
   describe '#drop' do
     context 'when sent with column choice 5 on a new board' do
       subject(:new_board) { described_class.new }
