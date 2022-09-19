@@ -30,14 +30,6 @@ class Game
     run_round until game_over?
   end
 
-  # def run_rounds
-  #   until game_over?
-  #     players.run_round
-  #     run_round
-  #     show_board
-  #   end
-  # end
-
   def game_over?
     winner? || draw?
   end
@@ -57,13 +49,6 @@ class Game
     player_turn
     board.run_round(to_index(current_player_choice), current_player.disc)
   end
-
-  # I think run_round should be the contents of run_rounds
-  # This should be renamed and contained within it
-  # def run_round
-  #   player_turn
-  #   board.drop(to_index(current_player_choice), current_player.disc)
-  # end
 
   def player_turn
     loop do

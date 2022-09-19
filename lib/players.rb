@@ -38,12 +38,10 @@ class Players
   end
 
   def random_player
-    all[rand(all.count)]
+    all.sample
   end
 
-  private
-
   def random_order
-    [random_player, other_player(random_player)].cycle
+    [first_player = random_player, other_player(first_player)].cycle
   end
 end

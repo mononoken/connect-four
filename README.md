@@ -5,11 +5,17 @@ In this project, we are testing our ability to code via test-driven development 
 I just recently read '99 Bottles of OOP' by Sandi Metz, so I am also hoping to apply the principles from that book in this project as well. These include working horizontally, reaching Shameless green, refactoring under green, SOLID principles, and many more concepts.
 
 TO DO:
+- FIX BUG WHERE IT STARTS with 'o' player and never switches player.
 - Replay function
 - Player set own name
 - Player set own disc
 - Better BoardVisualizer
 - Visualize where the winning combo is located
+
+2022-09-16
+There is a bug where game will sometimes not switch players. I had some difficulty figuring it out, but eventually I realized that the problem was with #random_order. It should have been obvious that it had to do with something involving random selection (since it did not happen consistently), but it took me a little time to figure out.
+
+The problem was that I was treating #random_player in #random_order as if it was caching the random_player. It was not, so it would sometimes randomly select the same player in the same order. Easy fix by caching the first random_player so that #other_player could work.
 
 2022-09-13
 Ran game and realized I need to update column numbers for some puts commands. Easy fix! Code was open to the change.
