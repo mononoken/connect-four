@@ -40,6 +40,10 @@ class Game
     board.any_wins?
   end
 
+  def winner
+    current_player if winner?
+  end
+
   def draw?
     board.full? && winner.nil?
   end
@@ -63,16 +67,8 @@ class Game
     return input if valid_input?(input) && board.valid_drop?(to_index(input))
   end
 
-  def valid_input?(input, lower_limit: LOWER_INPUT, upper_limit: UPPER_INPUT)
-    (lower_limit..upper_limit).include?(input)
-  end
-
-  def winner
-    current_player if winner?
-  end
-
-  def random_player
-    players.random_player
+  def valid_input?(input)
+    (LOWER_INPUT..UPPER_INPUT).include?(input)
   end
 
   def to_index(input)

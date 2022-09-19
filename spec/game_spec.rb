@@ -252,20 +252,20 @@ describe Game do
   end
 
   describe '#valid_input?' do
-    context 'when input is within lower limit' do
+    context 'when input is within LOWER_INPUT' do
       it 'returns true' do
-        lower_input_limit = '1'
-        valid_input = '1'
-        expect(game.valid_input?(valid_input, lower_limit: lower_input_limit))
+        stub_const('Game::LOWER_INPUT', '0')
+        valid_input = '0'
+        expect(game.valid_input?(valid_input))
           .to be(true)
       end
     end
 
-    context 'when input is within upper limit' do
+    context 'when input is within UPPER_INPUT' do
       it 'returns true' do
-        upper_input_limit = '7'
-        valid_input = '7'
-        expect(game.valid_input?(valid_input, upper_limit: upper_input_limit))
+        stub_const('Game::UPPER_INPUT', '9000')
+        valid_input = '8000'
+        expect(game.valid_input?(valid_input))
           .to be(true)
       end
     end
@@ -351,30 +351,6 @@ describe Game do
       end
     end
   end
-
-  # describe '#switch_current_player' do
-  #   context 'when current_player is player1' do
-  #     before do
-  #       game.current_player = game.players[0]
-  #     end
-
-  #     it 'sets current_player to player2' do
-  #       expect { game.switch_current_player }.to change { game.current_player }
-  #         .from(game.players[0]).to(game.players[1])
-  #     end
-  #   end
-
-  #   context 'when current_player is player2' do
-  #     before do
-  #       game.current_player = game.players[1]
-  #     end
-
-  #     it 'sets current_player to player1' do
-  #       expect { game.switch_current_player }.to change { game.current_player }
-  #         .from(game.players[1]).to(game.players[0])
-  #     end
-  #   end
-  # end
 end
 
 # rubocop:enable Metrics/BlockLength
