@@ -5,6 +5,8 @@ require_relative '../lib/board'
 # rubocop:disable Metrics/BlockLength
 
 describe Board do
+  subject(:board) { described_class.new }
+
   describe '#diagonal_win?' do
     context 'when disc [4, 2] does not form a left diagonal win' do
       subject(:continue_board) { described_class.new(partial_template) }
@@ -320,22 +322,50 @@ describe Board do
     end
   end
 
-  # Need to test matching_marks
   describe '#four_in_a_row?' do
     subject(:win_board) { described_class.new }
-    context 'when direction array of disc contains four discs in a row' do
+    context 'when selected row direction contains 4 matching discs in a row' do
+      let(:winning_direction) { [[4, 0], [4, 1], [4, 2], [4, 3], [4, 4]] }
+      let(:winning_disc) { [4, 2] }
+      before do
+        direction_values = ['x', 'x', 'x', 'x', nil]
+        winning_direction.each_with_index do |coordinate, index|
+          allow(win_board).to receive(:mark).with(coordinate)
+                                            .and_return(direction_values[index])
+        end
+        allow(win_board).to receive(:mark).with(winning_disc)
+                                          .and_return(direction_values[2])
+      end
 
-      xit 'returns true' do
-        disc = 'x'
-        direction = nil
-        expect(win_board.four_in_a_row?(disc, direction)).to be(true)
+      it 'returns true' do
+        result = win_board.four_in_a_row?(winning_disc, winning_direction)
+        expect(result).to be(true)
       end
     end
+
+    subject(:continue_board) { described_class.new }
+    context 'when selected row direction contains 4 matching discs in a row' do
+      let(:a_direction) { [[2, 2], [3, 2], [4, 2], [5, 2], [6, 2]] }
+      let(:a_disc) { [4, 2] }
+      before do
+        direction_values = ['o', 'x', 'o', nil, nil]
+        a_direction.each_with_index do |coordinate, index|
+          allow(continue_board).to receive(:mark).with(coordinate)
+                               .and_return(direction_values[index])
+        end
+        allow(continue_board).to receive(:mark).with(a_disc)
+                             .and_return(direction_values[2])
+      end
+
+      it 'returns false' do
+        result = continue_board.four_in_a_row?(a_disc, a_direction)
+        expect(result).to be(false)
+      end
+    end
+
   end
 
   describe '#matching_marks?' do
-    subject(:board) { described_class.new }
-
     context 'when line array all have the same disc value' do
       it 'returns true' do
         marks = %w[x x x x x]
@@ -369,8 +399,40 @@ describe Board do
     end
   end
 
+  describe '#line_values' do
+    context 'when given line returns nils to #mark' do
+      let(:line_of_nils) { [[0, 0], [1, 0], [2, 0], [3, 0]] }
+      before do
+        line_of_nils.each do |coordinate|
+          allow(board).to receive(:mark).with(coordinate)
+                                        .and_return(nil)
+        end
+      end
+
+      it 'returns an array of nils' do
+        array_of_nils = [nil, nil, nil, nil]
+        expect(board.line_values(line_of_nils)).to eq(array_of_nils)
+      end
+    end
+
+    context 'when given line returns 1, 2, and 3 to #mark' do
+      let(:line_of_ints) { [[0, 0], [1, 0], [2, 0]] }
+      before do
+        mark_values = [1, 2, 3]
+        line_of_ints.each_with_index do |coordinate, index|
+          allow(board).to receive(:mark).with(coordinate)
+                                        .and_return(mark_values[index])
+        end
+      end
+
+      it 'returns an array of the integers' do
+        array_of_ints = [1, 2, 3]
+        expect(board.line_values(line_of_ints)).to eq(array_of_ints)
+      end
+    end
+  end
+
   describe '#lines_of_four' do
-    subject(:board) { described_class.new }
     context 'when given an array of unique values' do
       let(:unique_values) { %w[a b c d e f g] }
       it 'returns an array of every instance of 4 items in the OG array' do

@@ -73,11 +73,6 @@ class Board
     columns.all?(&:full?)
   end
 
-  # Write tests
-  def data
-    columns.map(&:spaces).flatten
-  end
-
   def display
     BoardVisualizer.new(board: self).display
   end
@@ -94,11 +89,15 @@ class Board
     marks.all?(mark)
   end
 
-  private
-
   def line_values(line)
     line.map { |coordinate| mark(coordinate) }
   end
+
+  def data
+    columns.map(&:spaces).flatten
+  end
+
+  private
 
   def line(coordinates)
     BoardCoordinator.new(coordinates)

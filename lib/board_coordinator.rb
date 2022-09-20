@@ -2,7 +2,7 @@
 
 require_relative 'board_constants'
 
-# Finds lines for a given coordinate.
+# Finds lines (an array of coordinates) for a given coordinate.
 class BoardCoordinator
   include BoardConstants
 
