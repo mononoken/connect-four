@@ -4,12 +4,23 @@ In this project, we are testing our ability to code via test-driven development 
 
 I just recently read '99 Bottles of OOP' by Sandi Metz, so I am also hoping to apply the principles from that book in this project as well. These include working horizontally, reaching Shameless green, refactoring under green, SOLID principles, and many more concepts.
 
+I decided to make a log of my thoughts below as well. They ascend to the most recent date.
+
 TO DO:
 - Player set own name
 - Player set own disc
 - Better BoardVisualizer
 - Visualize where the winning combo is located
 - Replay function
+
+2022-09-27
+Been busy in the rainforest. I decided to stop trying to refactor my game. I see plenty of things I could work on, but I think my time is better off moving forward.
+
+One of the big mistakes I think I made was going too ham on tests. After finishing the game and having it in working condition, I went back to add tests to some of my private methods and moved them above the private keyword.
+
+I think I may be misunderstanding how private and public methods are meant to work. As I understand it now, this was actually a bad move because now my tests further tie the program down to its current iteration. The public methods are the ones visible to the rest of my classes and to the functioning of the program as a whole. Some of these private methods should have stayed private because they are the inner workings. They were the how and not the what.
+
+If I care about this project in the future, I can come back and try to fix these mistakes. I learned a lot in this project.
 
 2022-09-19
 Decided not to add replay function and to focus on adding tests for methods that I missed and cleaning things up.
