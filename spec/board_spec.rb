@@ -230,8 +230,8 @@ describe Board do
     end
   end
 
-  describe '#any_wins?' do
-    context 'when drop is specified on a disc with no wins' do
+  describe '#disc_wins?' do
+    context 'when specified disc does not form any wins' do
       subject(:continue_board) { described_class.new(partial_template) }
       let(:partial_template) do
         [
@@ -247,11 +247,31 @@ describe Board do
 
       it 'returns false' do
         coordinates = [2, 2]
-        expect(continue_board.any_wins?(coordinates)).to be(false)
+        expect(continue_board.disc_wins?(coordinates)).to be(false)
       end
     end
 
-    context 'when drop is specfied on a disc with a win' do
+    context 'when specified disc is nil' do
+      subject(:continue_board) { described_class.new(partial_template) }
+      let(:partial_template) do
+        [
+          [nil, nil, nil, nil, nil, nil],
+          ['x', 'o', 'x', nil, nil, nil],
+          ['o', 'x', 'x', nil, nil, nil],
+          ['o', 'o', 'x', nil, nil, nil],
+          ['x', 'o', 'o', nil, nil, nil],
+          [nil, nil, nil, nil, nil, nil],
+          [nil, nil, nil, nil, nil, nil]
+        ]
+      end
+
+      it 'returns false' do
+        coordinates = [5, 5]
+        expect(continue_board.disc_wins?(coordinates)).to be(false)
+      end
+    end
+
+    context 'when specified disc does form a win' do
       subject(:win_board) { described_class.new(win_template) }
       let(:win_template) do
         [
@@ -265,59 +285,9 @@ describe Board do
         ]
       end
 
-      it 'returns false' do
-        win_coordinates = [5, 3]
-        expect(win_board.any_wins?(win_coordinates)).to be(true)
-      end
-    end
-
-    context 'when drop was last called on not a winning move' do
-      subject(:continue_board) { described_class.new(continue_template) }
-      let(:continue_template) do
-        [
-          [nil, nil, nil, nil, nil, nil],
-          ['x', 'o', 'x', nil, nil, nil],
-          ['o', 'x', 'x', nil, nil, nil],
-          ['o', 'x', 'x', nil, nil, nil],
-          ['x', 'x', 'o', nil, nil, nil],
-          [nil, nil, nil, nil, nil, nil],
-          [nil, nil, nil, nil, nil, nil]
-        ]
-      end
-      let(:continue_move) { 1 }
-      let(:continue_disc) { 'o' }
-
-      before do
-        continue_board.drop(continue_move, continue_disc)
-      end
-
-      it 'returns false' do
-        expect(continue_board.any_wins?).to be(false)
-      end
-    end
-
-    context 'when drop was last called on a winning move' do
-      subject(:win_board) { described_class.new(win_template) }
-      let(:win_template) do
-        [
-          [nil, nil, nil, nil, nil, nil],
-          ['x', 'o', 'x', nil, nil, nil],
-          ['o', 'x', 'x', nil, nil, nil],
-          ['o', 'x', 'x', nil, nil, nil],
-          ['o', 'x', 'o', nil, nil, nil],
-          [nil, nil, nil, nil, nil, nil],
-          [nil, nil, nil, nil, nil, nil]
-        ]
-      end
-      let(:winning_move) { 5 }
-      let(:winning_disc) { 'o' }
-
-      before do
-        win_board.drop(winning_move, winning_disc)
-      end
-
       it 'returns true' do
-        expect(win_board.any_wins?).to be(true)
+        win_coordinates = [5, 3]
+        expect(win_board.disc_wins?(win_coordinates)).to be(true)
       end
     end
   end

@@ -23,6 +23,16 @@ class Board
     puts display
   end
 
+  def last_disc_wins?
+    disc_wins?(last_disc)
+  end
+
+  def disc_wins?(disc)
+    return false if disc.nil?
+
+    vertical_win?(disc) || horizontal_win?(disc) || diagonal_win?(disc)
+  end
+
   def diagonal_win?(disc)
     left_diagonal_win?(disc) || right_diagonal_win?(disc)
   end
@@ -47,14 +57,6 @@ class Board
     line.map.with_index do |_, index|
       line[index..index + 3] if line[index..index + 3].count == 4
     end.compact
-  end
-
-  # This feels a little cheaty. It's checking for "any" wins by just checking
-  # the last move and assuming no wins existed before it.
-  def any_wins?(disc = last_disc)
-    return false if disc.nil?
-
-    vertical_win?(disc) || horizontal_win?(disc) || diagonal_win?(disc)
   end
 
   def valid_drop?(column_num)

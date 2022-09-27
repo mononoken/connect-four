@@ -35,7 +35,7 @@ class Game
   end
 
   def winner?
-    board.any_wins?
+    board.last_disc_wins?
   end
 
   def winner
