@@ -13,8 +13,8 @@ class Game
   attr_accessor :current_player_choice
 
   def initialize(board: Board.new,
-                 player1: Player.new(name: 'player1', disc: 'o'),
-                 player2: Player.new(name: 'player2', disc: 'x'),
+                 player1: Player.new(name: 'player1', disc: "\u{26AA}"),
+                 player2: Player.new(name: 'player2', disc: "\u{26AB}"),
                  players: Players.new(player1: player1, player2: player2))
     @board = board
     @players = players
