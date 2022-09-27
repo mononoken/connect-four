@@ -34,8 +34,6 @@ class Game
     winner? || draw?
   end
 
-  # This seems a bit disconnected in deciding WHO the winner is.
-  # See #winner as well.
   def winner?
     board.any_wins?
   end
@@ -81,8 +79,8 @@ class Game
 
   private
 
-  def player_input(player_name = current_player.name)
-    puts "#{player_name}, choose a column between #{LOWER_INPUT} and #{UPPER_INPUT} to drop your disc."
+  def player_input(player = current_player)
+    puts "#{player.name} (#{player.disc}), choose a column between #{LOWER_INPUT} and #{UPPER_INPUT} to drop your disc."
     gets.chomp
   end
 
