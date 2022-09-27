@@ -13,10 +13,6 @@ class BoardVisualizer
     @board = board
   end
 
-  def converted_data(data = board.data)
-    data.map { |disc| disc.nil? ? '  ' : disc }
-  end
-
   def display(data = converted_data, labels = column_numbers)
     <<~TEMPLATE
       ||#{data[5]}|#{data[11]}|#{data[17]}|#{data[23]}|#{data[29]}|#{data[35]}|#{data[41]}||
@@ -30,6 +26,10 @@ class BoardVisualizer
   end
 
   private
+
+  def converted_data(data = board.data)
+    data.map { |disc| disc.nil? ? '  ' : disc }
+  end
 
   def column_numbers
     (LOWER_INPUT..UPPER_INPUT).to_a
